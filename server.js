@@ -20,6 +20,42 @@ app.use(express.static("public"));
 
 const rooms = new Map();
 
+const ROOM_DIRECTORY = [
+    { id: "lex-main", name: "الرئيسية", featured: false },
+    { id: "malik-private", name: "غرفة المستشار مالك", featured: true },
+    { id: "room-news", name: "الأخبار", featured: false },
+    { id: "room-sports", name: "الرياضة", featured: false },
+    { id: "room-entertainment", name: "الترفيه", featured: false }
+];
+
+function getRoomMeta(roomId) {
+    return ROOM_DIRECTORY.find(room => room.id === roomId) || {
+        id: roomId,
+        name: roomId,
+        featured: false
+    };
+}
+
+function roomsDirectoryState() {
+    return ROOM_DIRECTORY.map(meta => {
+        const room = rooms.get(meta.id);
+
+        return {
+            id: meta.id,
+            name: meta.name,
+            featured: meta.featured,
+            hostName: room?.hostName || null,
+            viewerCount: room?.viewers?.size || 0,
+            live: Boolean(room?.live),
+            online: Boolean(room?.host || room?.viewers?.size)
+        };
+    });
+}
+
+function broadcastRoomsDirectory() {
+    io.emit("rooms-directory", roomsDirectoryState());
+}
+
 /* ===== PLATFORM HEALTH ===== */
 app.get("/api/health", (req, res) => {
     res.status(200).json({
@@ -36,11 +72,16 @@ app.get("/api/health", (req, res) => {
 
 function getRoom(roomId) {
     if (!rooms.has(roomId)) {
+        const meta = getRoomMeta(roomId);
+
         rooms.set(roomId, {
             id: roomId,
+            name: meta.name,
+            featured: meta.featured,
             host: null,
             hostName: null,
-            viewers: new Map()
+            viewers: new Map(),
+            live: false
         });
     }
 
@@ -65,6 +106,8 @@ io.on("connection", socket => {
 
     console.log("SOCKET_CONNECTED:", socket.id);
 
+    socket.emit("rooms-directory", roomsDirectoryState());
+
     socket.on("disconnect", reason => {
         console.log("SOCKET_DISCONNECTED:", socket.id, reason);
     });
@@ -79,10 +122,20 @@ io.on("connection", socket => {
         });
 
         room = String(room || "").trim();
-        user = String(user || "زائر").trim();
+        user = String(user || "").trim();
         role = role === "host" ? "host" : "viewer";
 
         if (!room) return;
+
+        if (!user) {
+            socket.emit("join-error", "يرجى إدخال اسم المستخدم أولاً.");
+            return;
+        }
+
+        if (user.length > 50) {
+            socket.emit("join-error", "اسم المستخدم يجب ألا يتجاوز 50 حرفًا.");
+            return;
+        }
 
         const data = getRoom(room);
 
@@ -104,6 +157,9 @@ io.on("connection", socket => {
         socket.user = user;
 
         socket.join(room);
+
+        broadcastRoomState(data);
+        broadcastRoomsDirectory();
 
         io.to(room).emit("system", {
             text: role === "host"
@@ -199,10 +255,9 @@ io.on("connection", socket => {
         });
 
         broadcastRoomState(room);
-    });
+        broadcastRoomsDirectory();
 
-    
-        // إعادة إرسال المشاهدين الموجودين بالفعل للمضيف
+    // إعادة إرسال المشاهدين الموجودين بالفعل للمضيف
         const currentRoom = rooms.get(socket.room);
         if (currentRoom && currentRoom.viewers) {
             for (const [viewerId, viewerName] of currentRoom.viewers.entries()) {
@@ -218,8 +273,9 @@ io.on("connection", socket => {
                 });
             }
         }
+    });
 
-        socket.on("stop-broadcast", () => {
+    socket.on("stop-broadcast", () => {
         if (!socket.room || socket.role !== "host") return;
 
         const room = rooms.get(socket.room);
@@ -233,14 +289,27 @@ io.on("connection", socket => {
         });
 
         broadcastRoomState(room);
+        broadcastRoomsDirectory();
     });
 
-    socket.on("gift", () => {
-        if (!socket.room) return;
+    socket.on("gift", gift => {
+        if (!socket.room || !socket.user) return;
+
+        const allowedGifts = new Set([
+            "🌹 وردة",
+            "💎 ماسة",
+            "🚀 صاروخ"
+        ]);
+
+        const selectedGift = String(gift || "").trim();
+
+        if (!allowedGifts.has(selectedGift)) return;
 
         io.to(socket.room).emit("gift", {
-            user: socket.user || "زائر",
-            text: "🎁 أرسل هدية"
+            user: socket.user,
+            role: socket.role || "viewer",
+            text: selectedGift,
+            time: new Date().toISOString()
         });
     });
 
@@ -282,7 +351,7 @@ function leaveRoom(socket) {
         room.hostName = null;
 
         io.to(roomId).emit("system", {
-            text: `⛔ المضيف ${socket.user || ""} غادر الغرفة`
+            text: `⛔ ${socket.user || "المستخدم"} غادر الغرفة`
         });
     }
 
@@ -299,6 +368,8 @@ function leaveRoom(socket) {
     } else {
         rooms.delete(roomId);
     }
+
+    broadcastRoomsDirectory();
 
     socket.room = null;
     socket.role = null;

@@ -1,255 +1,158 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>لكس | LIVE - منصة البث الاحترافية</title>
-    <style>
-        :root {
-            --primary: #ff2a5f;
-            --secondary: #7928ca;
-            --bg-dark: #0f1016;
-            --card-bg: #181925;
-            --text-main: #ffffff;
-            --text-muted: #8f92a1;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-        header {
-            background: rgba(15, 16, 22, 0.95);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        h2 { font-size: 20px; color: var(--primary); }
-        .container { padding: 15px; }
-        .room-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
-        .btn-live {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 42, 95, 0.4);
-        }
-        .comments-box {
-            background: #12131c;
-            border-radius: 12px;
-            padding: 10px;
-            height: 120px;
-            overflow-y: auto;
-            margin-top: 10px;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(15, 16, 22, 0.98);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-        }
-        .nav-item { color: var(--text-muted); text-align: center; font-size: 12px; text-decoration: none; cursor: pointer; }
-        .nav-item.active { color: var(--primary); font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h2>🎥 لكس | LIVE</h2>
-        <span>🔴 متصل</span>
-    </header>
-
-    <div class="container">
-        <div class="room-card">
-            <h3 style="margin-bottom: 5px;">الغرفة الرئيسية للمضيف</h3>
-            <p style="color: var(--text-muted); font-size: 13px;">تفاعل مع المتابعين وادرس إعدادات البث بجودة عالية.</p>
-            
-            <div class="comments-box" id="roomComments">
-                <div style="color: #2ecc71;">⚡ النظام: مرحباً بك في غرفة البث المباشر.</div>
-            </div>
-
-            <button class="btn-live" id="broadcastBtn" onclick="toggleBroadcast()">بدء البث المباشر 🔴</button>
-        </div>
-    </div>
-
-
-    <!-- مستشار مالك + مستودع البرامج -->
-    <div class="room-card" style="margin-top:15px;">
-        <h3 style="margin-bottom:8px;">⚖️ خدمات لكس</h3>
-        <p style="color:var(--text-muted);font-size:13px;margin-bottom:10px;">
-            خدمات إضافية للمستخدمين
-        </p>
-
-        <button class="btn-live"
-                onclick="window.location.href='/malik-chat.html'">
-            ⚖️ تحدث مع المستشار مالك
-        </button>
-
-        <button class="btn-live"
-                style="background:linear-gradient(135deg,#0066cc,#00a8ff);"
-                onclick="window.location.href='/software-store.html'">
-            📦 مستودع البرامج
-        </button>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active">🏠 الرئيسية</div>
-        <div class="nav-item">🔎 اكتشاف</div>
-        <div class="nav-item" onclick="alert('منصة لكس للبث المباشر - الإصدار الاحترافي 2026')">📹 بث مباشر</div>
-        <div class="nav-item">💬 الرسائل</div>
-        <div class="nav-item">👤 حسابي</div>
-    </div>
-
-    <script>
-        let isLive = false;
-        function toggleBroadcast() {
-            const btn = document.getElementById('broadcastBtn');
-            const comments = document.getElementById('roomComments');
-            
-            isLive = !isLive;
-            if(isLive) {
-                btn.textContent = '⏹️ إيقاف البث';
-                btn.style.background = 'linear-gradient(135deg, #ff416c, #ff4b2b)';
-                const msg = document.createElement('div');
-                msg.style.color = '#2ecc71';
-                msg.style.marginTop = '6px';
-                msg.innerHTML = '🔴 النظام: بدأ البث المباشر بنجاح وتفعيل غرفة المضيف!';
-                comments.appendChild(msg);
-                comments.scrollTop = comments.scrollHeight;
-            } else {
-                btn.textContent = 'بدء البث المباشر 🔴';
-                btn.style.background = 'linear-gradient(135deg, #ff2a5f, #7928ca)';
-                const msg = document.createElement('div');
-                msg.style.color = '#e74c3c';
-                msg.style.marginTop = '6px';
-                msg.innerHTML = '⏹️ النظام: تم إيقاف البث المؤقت.';
-                comments.appendChild(msg);
-                comments.scrollTop = comments.scrollHeight;
-            }
-        }
-    </script>
-
-<div class="room-card" style="margin-top: 15px;">
-    <h4 style="margin-bottom: 8px; color: #ff2a5f;">🎁 هدايا وتفاعل المتابعين</h4>
-    <div style="display: flex; gap: 8px; justify-content: space-between;">
-        <button onclick="sendGift('🌹 وردة')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">🌹 وردة</button>
-        <button onclick="sendGift('💎 ماسة')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">💎 ماسة</button>
-        <button onclick="sendGift('🚀 صاروخ')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">🚀 صاروخ</button>
-    </div>
-</div>
-<script>
-const randomUsers = ['أحمد المصري', 'سارة البث', 'محمد علي', 'ريم 👑', 'فهد الكاسر'];
-const randomComments = [
-    'منور يا أسطورة البث! 🔥',
-    'أحلى بث والله 🚀',
-    'ممكن تفتح الغرفة التالية؟',
-    'صوتك واضح وجميل 👏',
-    'تم إرسال أحلى هدية للمضيف ❤️'
-];
-let chatInterval = null;
-
-function startChatSimulation() {
-    if (chatInterval) clearInterval(chatInterval);
-    chatInterval = setInterval(() => {
-        if (!isLive) return;
-        const commentsBox = document.getElementById('roomComments');
-        if (!commentsBox) return;
-        const randomUser = randomUsers[Math.floor(Math.random() * randomUsers.length)];
-        const randomMsg = randomComments[Math.floor(Math.random() * randomComments.length)];
-        const msgDiv = document.createElement('div');
-        msgDiv.style.margin = '4px 0';
-        msgDiv.innerHTML = `<b style="color: #ff2a5f;">${randomUser}:</b> <span style="color: #fff;">${randomMsg}</span>`;
-        commentsBox.appendChild(msgDiv);
-        commentsBox.scrollTop = commentsBox.scrollHeight;
-    }, 3000);
-}
-
-function sendGift(giftName) {
-    if (!isLive) {
-        alert('الرجاء بدء البث أولاً لتتمكن من تلقي الهدايا!');
-        return;
-    }
-    const commentsBox = document.getElementById('roomComments');
-    if (!commentsBox) return;
-    const msgDiv = document.createElement('div');
-    msgDiv.style.cssText = 'color: #f1c40f; font-weight: bold; margin: 5px 0; background: rgba(241, 196, 15, 0.1); padding: 6px; border-radius: 6px;';
-    msgDiv.innerHTML = `🎁 تفاعل النظام: تلقيت هدية (${giftName}) من أحد المعجبين!`;
-    commentsBox.appendChild(msgDiv);
-    commentsBox.scrollTop = commentsBox.scrollHeight;
-}
-
-const originalToggle = window.toggleBroadcast;
-window.toggleBroadcast = function() {
-    originalToggle();
-    if(isLive) {
-        startChatSimulation();
-    } else {
-        if(chatInterval) clearInterval(chatInterval);
-    }
-}
-</script>
-
-
-<script>
-// تفعيل التنقل بين الأزرار السفلية
-const navItems = document.querySelectorAll('.nav-item');
-navItems.forEach((item, index) => {
-    item.addEventListener('click', function() {
-        // إزالة التحديد عن الكل
-        navItems.forEach(nav => nav.classList.remove('active'));
-        // تحديد العنصر الحالي
-        this.classList.add('active');
-
-        // التعامل مع الوظائف بناءً على الزر المضغوط
-        const text = this.innerText;
-        if(text.includes('حسابي')) {
-            alert('👤 حساب المضيف: لكس | LIVE\nالمستوى: VIP 🌟\nالمتابعين: 14.5K\nالأرباح: 3,200 ماسة');
-        } else if(text.includes('الرسائل')) {
-            alert('💬 صندوق الرسائل:\n- رسالة جديدة من الدعم الفني\n- 3 رسائل غير منقوشة من المعجبين');
-        } else if(text.includes('اكتشاف')) {
-            alert('🔎 قسم الاكتشاف:\nجارٍ البحث عن البثوك الرائجة الآن... (البثوث نشطة حالياً)');
-        } else if(text.includes('بث مباشر')) {
-            alert('📹 أنت الآن بالفعل في غرفة البث المباشر الخاصة بك!');
-        } else if(text.includes('الرئيسية')) {
-            // العودة للصفحة الرئيسية للبث
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    });
-});
-</script>
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>لكس | LIVE - منصة البث الاحترافية</title>
 <style>
-#lexSharePageButton{
+:root{
+  --primary:#ff2a5f;
+  --secondary:#7928ca;
+  --bg-dark:#0f1016;
+  --card-bg:#181925;
+  --text-main:#fff;
+  --text-muted:#8f92a1;
+  --success:#2ecc71;
+  --danger:#e74c3c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg-dark);
+  color:var(--text-main);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+header{
+  background:rgba(15,16,22,.96);
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+h2{font-size:20px;color:var(--primary)}
+.container{padding:15px;max-width:900px;margin:auto}
+.room-card{
+  background:var(--card-bg);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+.btn-live{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#fff;
+  border:0;
+  padding:12px 20px;
+  width:100%;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+.btn-live:disabled{opacity:.5;cursor:not-allowed}
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+.control-btn{
+  border:0;
+  border-radius:10px;
+  padding:11px;
+  background:#252636;
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
+}
+.status-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.badge{
+  background:#252636;
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:12px;
+  color:#ddd;
+}
+.badge.live{color:#fff;background:#b91c43}
+.badge.ok{color:#fff;background:#176b3c}
+.video-wrap{
+  position:relative;
+  background:#08090d;
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:12px;
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+video{
+  display:block;
+  width:100%;
+  max-height:65vh;
+  background:#000;
+  object-fit:contain;
+}
+.video-placeholder{
+  color:#8f92a1;
+  padding:50px 15px;
+  text-align:center;
+}
+.comments-box{
+  background:#12131c;
+  border-radius:12px;
+  padding:10px;
+  height:180px;
+  overflow-y:auto;
+  margin-top:10px;
+  font-size:14px;
+  border:1px solid rgba(255,255,255,.05);
+}
+.comment{
+  margin:5px 0;
+  padding:5px 7px;
+  border-radius:7px;
+  background:rgba(255,255,255,.025);
+}
+.comment .name{color:var(--primary);font-weight:bold}
+.comment.system{color:var(--success)}
+.comment.gift{color:#f1c40f;font-weight:bold}
+.chat-compose{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
+.chat-compose input{
+  flex:1;
+  min-width:0;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  background:#252636;
+  color:#fff;
+  outline:none;
+}
+.chat-compose button{
+  border:0;
+  border-radius:10px;
+  padding:0 16px;
+  background:#1f6feb;
+  color:#fff;
+  font-weight:bold;
+}
+.share{
   position:fixed;
   top:16px;
   left:16px;
@@ -264,70 +167,835 @@ navItems.forEach((item, index) => {
   cursor:pointer;
   box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
-#lexSharePageButton:active{
-  transform:scale(.97);
+.nav-bar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:rgba(15,16,22,.98);
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);
+  z-index:1000;
+}
+.nav-item{
+  color:var(--text-muted);
+  text-align:center;
+  font-size:12px;
+  text-decoration:none;
+  cursor:pointer;
+}
+.nav-item.active{color:var(--primary);font-weight:bold}
+.hidden{display:none!important}
+select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:#252636;
+  color:#fff;
+  margin-top:8px;
+}
+input.name-input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:#252636;
+  color:#fff;
+  outline:none;
+  margin-top:8px;
+}
+.small{
+  color:var(--text-muted);
+  font-size:12px;
+  line-height:1.6;
+  margin-top:7px;
 }
 </style>
+</head>
 
-<button id="lexSharePageButton" type="button" aria-label="مشاركة الصفحة">
-  📤 مشاركة
-</button>
+<body>
+
+<button class="share" id="lexSharePageButton" type="button">📤 مشاركة</button>
+
+<header>
+  <h2>🎥 لكس | LIVE</h2>
+  <span id="connectionStatus">⚪ جاري الاتصال</span>
+</header>
+
+<div class="container">
+
+  <div class="room-card" id="roomsDirectory">
+    <h3>📡 الغرف المباشرة</h3>
+    <p class="small">اختر الغرفة التي تريد الدخول إليها.</p>
+
+    <div id="roomsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px">
+
+      <button type="button" class="control-btn room-choice" data-room-id="lex-main" data-room-name="الرئيسية" style="width:100%">
+        🏠<br><strong>الرئيسية</strong><br><small>غرفة عامة</small>
+      </button>
+
+      <button type="button" class="control-btn room-choice" data-room-id="malik-private" data-room-name="غرفة المستشار مالك" style="width:100%">
+        ⚖️<br><strong>المستشار مالك</strong><br><small>غرفة خاصة</small>
+      </button>
+
+      <button type="button" class="control-btn room-choice" data-room-id="room-news" data-room-name="الأخبار" style="width:100%">
+        📰<br><strong>الأخبار</strong><br><small>غرفة بث</small>
+      </button>
+
+      <button type="button" class="control-btn room-choice" data-room-id="room-sports" data-room-name="الرياضة" style="width:100%">
+        ⚽<br><strong>الرياضة</strong><br><small>غرفة بث</small>
+      </button>
+
+      <button type="button" class="control-btn room-choice" data-room-id="room-entertainment" data-room-name="الترفيه" style="width:100%">
+        🎬<br><strong>الترفيه</strong><br><small>غرفة بث</small>
+      </button>
+
+    </div>
+  </div>
+
+  <div class="room-card">
+    <h3>🎥 غرفة البث المباشر</h3>
+    <p class="small">
+      بث مباشر حقيقي باستخدام WebRTC وSocket.IO.
+    </p>
+
+    <label class="small">اسم المستخدم</label>
+    <input
+      id="userName"
+      class="name-input"
+      value=""
+      maxlength="50"
+      autocomplete="name"
+      placeholder="اكتب اسمك قبل دخول الغرفة"
+      required
+    >
+
+    <label class="small">الدور</label>
+    <select id="roleSelect">
+      <option value="host">👑 مضيف</option>
+      <option value="viewer">👁️ مشاهد</option>
+    </select>
+
+    <button class="btn-live" id="joinBtn">دخول الغرفة</button>
+
+    <div class="status-row">
+      <span class="badge" id="roomBadge">الغرفة: الرئيسية</span>
+      <span class="badge" id="roleBadge">غير متصل</span>
+      <span class="badge" id="viewerBadge">المشاهدون: 0</span>
+      <span class="badge" id="liveBadge">⚫ غير مباشر</span>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" id="startBtn" disabled>🔴 بدء البث</button>
+      <button class="control-btn" id="stopBtn" disabled>⏹️ إيقاف البث</button>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <h3>📡 الفيديو المباشر</h3>
+
+    <div class="video-wrap" id="hostVideoWrap">
+      <div class="video-placeholder" id="hostPlaceholder">
+        كاميرا المضيف ستظهر هنا عند بدء البث.
+      </div>
+      <video id="hostVideo" autoplay muted playsinline class="hidden"></video>
+    </div>
+
+    <div class="video-wrap hidden" id="viewerVideoWrap">
+      <div class="video-placeholder" id="viewerPlaceholder">
+        بانتظار إشارة البث من المضيف...
+      </div>
+      <video id="viewerVideo" autoplay playsinline class="hidden"></video>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <h3 style="color:#ff2a5f">💬 التعليقات والتفاعل</h3>
+
+    <div class="comments-box" id="roomComments">
+      <div class="comment system">⚡ النظام: مرحباً بك في غرفة لكس للبث المباشر.</div>
+    </div>
+
+    <div class="chat-compose">
+      <input id="chatInput" placeholder="اكتب تعليقك..." maxlength="500" autocomplete="off">
+      <button id="chatBtn">إرسال</button>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <h4 style="margin-bottom:8px;color:#ff2a5f">🎁 هدايا وتفاعل المتابعين</h4>
+
+    <div style="display:flex;gap:8px;justify-content:space-between">
+      <button class="control-btn" style="flex:1" data-gift="🌹 وردة">🌹 وردة</button>
+      <button class="control-btn" style="flex:1" data-gift="💎 ماسة">💎 ماسة</button>
+      <button class="control-btn" style="flex:1" data-gift="🚀 صاروخ">🚀 صاروخ</button>
+    </div>
+  </div>
+
+  <div class="room-card">
+    <h3>⚖️ خدمات لكس</h3>
+    <p class="small">خدمات إضافية للمستخدمين</p>
+
+    <button class="btn-live" onclick="window.location.href='/malik-chat.html'">
+      ⚖️ تحدث مع المستشار مالك
+    </button>
+
+    <button class="btn-live"
+      style="background:linear-gradient(135deg,#0066cc,#00a8ff)"
+      onclick="window.location.href='/software-store.html'">
+      📦 مستودع البرامج
+    </button>
+  </div>
+
+</div>
+
+<div class="nav-bar">
+  <div class="nav-item active" data-nav="home">🏠 الرئيسية</div>
+  <div class="nav-item" data-nav="discover">🔎 اكتشاف</div>
+  <div class="nav-item" data-nav="live">📹 بث مباشر</div>
+  <div class="nav-item" data-nav="messages">💬 الرسائل</div>
+  <div class="nav-item" data-nav="account">👤 حسابي</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
 
 <script>
 (function(){
-  const btn = document.getElementById("lexSharePageButton");
-  if(!btn) return;
 
-  btn.addEventListener("click", async function(){
-    const url = window.location.href;
-    const title = document.title || "لكس | LIVE";
-    const text = "شاهد منصة لكس | LIVE";
+let ROOM_ID = "lex-main";
+let ROOM_NAME = "الرئيسية";
+let socket = null;
+let joined = false;
+let currentRole = "host";
+let currentUser = "";
+let isLive = false;
+let localStream = null;
+let peerConnections = new Map();
 
-    if(navigator.share){
-      try{
-        await navigator.share({
-          title: title,
-          text: text,
-          url: url
-        });
-        return;
-      }catch(e){
-        if(e && e.name === "AbortError") return;
-      }
+const $ = id => document.getElementById(id);
+
+const connectionStatus = $("connectionStatus");
+const userName = $("userName");
+const roleSelect = $("roleSelect");
+const joinBtn = $("joinBtn");
+const startBtn = $("startBtn");
+const stopBtn = $("stopBtn");
+const roleBadge = $("roleBadge");
+const viewerBadge = $("viewerBadge");
+const liveBadge = $("liveBadge");
+const comments = $("roomComments");
+const chatInput = $("chatInput");
+const chatBtn = $("chatBtn");
+const hostVideo = $("hostVideo");
+const hostPlaceholder = $("hostPlaceholder");
+const viewerVideo = $("viewerVideo");
+const viewerPlaceholder = $("viewerPlaceholder");
+const viewerVideoWrap = $("viewerVideoWrap");
+
+function resetRoomUI(){
+  joined = false;
+  isLive = false;
+
+  closeAllPeers();
+  stopCamera();
+
+  joinBtn.disabled = false;
+  roleSelect.disabled = false;
+  userName.disabled = false;
+
+  startBtn.disabled = true;
+  stopBtn.disabled = true;
+
+  roleBadge.textContent = "غير متصل";
+  viewerBadge.textContent = "المشاهدون: 0";
+  liveBadge.textContent = "⚫ غير مباشر";
+  liveBadge.classList.remove("live");
+
+  viewerVideo.srcObject = null;
+  viewerVideo.classList.add("hidden");
+  viewerPlaceholder.classList.remove("hidden");
+
+  $("roomBadge").textContent = "الغرفة: " + ROOM_NAME;
+}
+
+function selectRoom(roomId, roomName){
+  if(!roomId || !roomName) return;
+
+  if(joined && socket){
+    if(currentRole === "host" && isLive){
+      socket.emit("stop-broadcast");
     }
 
-    const message =
-      text + "\\n\\n" + url;
+    socket.emit("leave-room");
+    resetRoomUI();
+  }
 
-    const choice = prompt(
-      "اختر طريقة المشاركة:\\n\\n" +
-      "1 - واتساب\\n" +
-      "2 - البريد الإلكتروني\\n" +
-      "3 - نسخ الرابط\\n\\n" +
-      "أدخل الرقم:",
-      "1"
-    );
+  ROOM_ID = roomId;
+  ROOM_NAME = roomName;
 
-    if(choice === "1"){
-      window.open(
-        "https://wa.me/?text=" + encodeURIComponent(message),
-        "_blank"
-      );
-    }else if(choice === "2"){
-      window.location.href =
-        "mailto:?subject=" +
-        encodeURIComponent(title) +
-        "&body=" +
-        encodeURIComponent(message);
-    }else if(choice === "3"){
-      try{
-        await navigator.clipboard.writeText(url);
-        alert("تم نسخ رابط الصفحة بنجاح.");
-      }catch(e){
-        prompt("انسخ الرابط:", url);
-      }
+  $("roomBadge").textContent = "الغرفة: " + ROOM_NAME;
+
+  document.querySelectorAll(".room-choice").forEach(button => {
+    const active = button.dataset.roomId === ROOM_ID;
+    button.style.outline = active ? "2px solid #ff2a5f" : "";
+    button.style.transform = active ? "scale(1.02)" : "";
+  });
+
+  addMessage("📍 تم اختيار غرفة: " + ROOM_NAME + ". اضغط دخول الغرفة.", "system");
+}
+
+function renderRoomsDirectory(rooms){
+  const grid = $("roomsGrid");
+  if(!grid || !Array.isArray(rooms)) return;
+
+  grid.innerHTML = rooms.map(room => {
+    const live = Boolean(room.live);
+    const online = Boolean(room.online);
+    const status = live ? "🟢 مباشر" : (online ? "🟡 متصل" : "⚫ غير مباشر");
+    const viewers = Number(room.viewerCount || 0);
+    const host = room.hostName
+      ? "👑 " + room.hostName
+      : "لا يوجد مضيف";
+
+    const featured = room.featured
+      ? "border:2px solid rgba(255,42,95,.7);box-shadow:0 0 18px rgba(255,42,95,.15);"
+      : "";
+
+    const active = room.id === ROOM_ID;
+
+    return `
+      <button
+        type="button"
+        class="control-btn room-choice"
+        data-room-id="${String(room.id).replace(/"/g, "&quot;")}"
+        data-room-name="${String(room.name).replace(/"/g, "&quot;")}"
+        style="width:100%;${featured}${active ? "outline:2px solid #ff2a5f;transform:scale(1.02);" : ""}"
+      >
+        ${room.featured ? "⚖️" : "📡"}<br>
+        <strong>${room.name}</strong><br>
+        <small>${status} • 👥 ${viewers}</small><br>
+        <small>${host}</small>
+      </button>
+    `;
+  }).join("");
+}
+
+$("roomsGrid").addEventListener("click", event => {
+  const button = event.target.closest(".room-choice");
+  if(!button) return;
+
+  selectRoom(
+    button.dataset.roomId,
+    button.dataset.roomName
+  );
+});
+
+selectRoom("lex-main", "الرئيسية");
+
+function addMessage(text, type=""){
+  const div = document.createElement("div");
+  div.className = "comment " + type;
+  div.textContent = text;
+  comments.appendChild(div);
+  comments.scrollTop = comments.scrollHeight;
+}
+
+function setConnection(text){
+  connectionStatus.textContent = text;
+}
+
+function setLiveState(live, hostName){
+  isLive = !!live;
+
+  if(isLive){
+    liveBadge.textContent = "🔴 مباشر";
+    liveBadge.classList.add("live");
+    addMessage("🔴 " + (hostName || "المضيف") + " بدأ البث.", "system");
+  }else{
+    liveBadge.textContent = "⚫ غير مباشر";
+    liveBadge.classList.remove("live");
+    addMessage("⏹️ تم إيقاف البث.", "system");
+  }
+
+  if(currentRole === "host"){
+    startBtn.disabled = !joined || isLive;
+    stopBtn.disabled = !joined || !isLive;
+  }
+}
+
+function closePeer(id){
+  const pc = peerConnections.get(id);
+  if(pc){
+    try{ pc.close(); }catch(e){}
+    peerConnections.delete(id);
+  }
+}
+
+function closeAllPeers(){
+  for(const id of peerConnections.keys()) closePeer(id);
+}
+
+async function createOfferForViewer(viewerId){
+  if(currentRole !== "host" || !localStream || !socket) return;
+
+  closePeer(viewerId);
+
+  const pc = new RTCPeerConnection({
+    iceServers:[
+      {urls:"stun:stun.l.google.com:19302"},
+      {urls:"stun:stun1.l.google.com:19302"}
+    ]
+  });
+
+  peerConnections.set(viewerId, pc);
+
+  localStream.getTracks().forEach(track => {
+    pc.addTrack(track, localStream);
+  });
+
+  pc.onicecandidate = event => {
+    if(event.candidate){
+      socket.emit("webrtc-ice", {
+        to: viewerId,
+        candidate: event.candidate
+      });
+    }
+  };
+
+  pc.onconnectionstatechange = () => {
+    if(["failed","closed","disconnected"].includes(pc.connectionState)){
+      closePeer(viewerId);
+    }
+  };
+
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+
+  socket.emit("webrtc-offer", {
+    to: viewerId,
+    offer: pc.localDescription
+  });
+}
+
+async function startCamera(){
+  if(localStream) return true;
+
+  try{
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:"user"},
+      audio:true
+    });
+
+    hostVideo.srcObject = localStream;
+    hostVideo.classList.remove("hidden");
+    hostPlaceholder.classList.add("hidden");
+
+    return true;
+  }catch(error){
+    console.error(error);
+    addMessage("⚠️ تعذر الوصول إلى الكاميرا أو الميكروفون.", "system");
+    return false;
+  }
+}
+
+function stopCamera(){
+  if(localStream){
+    localStream.getTracks().forEach(track => track.stop());
+    localStream = null;
+  }
+
+  hostVideo.srcObject = null;
+  hostVideo.classList.add("hidden");
+  hostPlaceholder.classList.remove("hidden");
+}
+
+function connectSocket(){
+  if(socket) return;
+
+  socket = io();
+
+  socket.on("connect", () => {
+    setConnection("🟢 متصل");
+    $("connectionStatus").style.color = "#2ecc71";
+  });
+
+  socket.on("disconnect", () => {
+    setConnection("🔴 انقطع الاتصال");
+    $("connectionStatus").style.color = "#e74c3c";
+    joined = false;
+    joinBtn.disabled = false;
+    startBtn.disabled = true;
+    stopBtn.disabled = true;
+  });
+
+  socket.on("join-error", message => {
+    addMessage("⚠️ " + message, "system");
+    joined = false;
+    joinBtn.disabled = false;
+  });
+
+  socket.on("system", data => {
+    if(data && data.text) addMessage(data.text, "system");
+  });
+
+  socket.on("rooms-directory", rooms => {
+    renderRoomsDirectory(rooms);
+  });
+
+  socket.on("room-state", state => {
+    if(!state) return;
+
+    viewerBadge.textContent =
+      "المشاهدون: " + (Number(state.viewerCount) || 0);
+
+    if(state.host){
+      roleBadge.textContent = "👑 المضيف: " + state.host;
     }
   });
+
+  socket.on("broadcast-state", state => {
+    if(!state) return;
+
+    setLiveState(state.live, state.host);
+
+    if(!state.live && currentRole === "viewer"){
+      viewerVideo.srcObject = null;
+      viewerVideo.classList.add("hidden");
+      viewerPlaceholder.classList.remove("hidden");
+      closeAllPeers();
+    }
+  });
+
+  socket.on("viewer-ready", async data => {
+    if(currentRole !== "host") return;
+    if(!data || !data.viewerId) return;
+
+    try{
+      await createOfferForViewer(data.viewerId);
+    }catch(error){
+      console.error("OFFER_ERROR", error);
+      addMessage("⚠️ تعذر إنشاء اتصال الفيديو مع أحد المشاهدين.", "system");
+    }
+  });
+
+  socket.on("webrtc-offer", async data => {
+    if(currentRole !== "viewer") return;
+    if(!data || !data.from || !data.offer) return;
+
+    try{
+      closePeer(data.from);
+
+      const pc = new RTCPeerConnection({
+        iceServers:[
+          {urls:"stun:stun.l.google.com:19302"},
+          {urls:"stun:stun1.l.google.com:19302"}
+        ]
+      });
+
+      peerConnections.set(data.from, pc);
+
+      pc.ontrack = event => {
+        if(event.streams && event.streams[0]){
+          viewerVideo.srcObject = event.streams[0];
+          viewerVideo.classList.remove("hidden");
+          viewerPlaceholder.classList.add("hidden");
+        }
+      };
+
+      pc.onicecandidate = event => {
+        if(event.candidate){
+          socket.emit("webrtc-ice", {
+            to:data.from,
+            candidate:event.candidate
+          });
+        }
+      };
+
+      await pc.setRemoteDescription(
+        new RTCSessionDescription(data.offer)
+      );
+
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      socket.emit("webrtc-answer", {
+        to:data.from,
+        answer:pc.localDescription
+      });
+
+    }catch(error){
+      console.error("ANSWER_ERROR", error);
+      addMessage("⚠️ تعذر استقبال فيديو البث.", "system");
+    }
+  });
+
+  socket.on("webrtc-answer", async data => {
+    if(currentRole !== "host") return;
+    if(!data || !data.from || !data.answer) return;
+
+    const pc = peerConnections.get(data.from);
+    if(!pc) return;
+
+    try{
+      await pc.setRemoteDescription(
+        new RTCSessionDescription(data.answer)
+      );
+    }catch(error){
+      console.error("REMOTE_ANSWER_ERROR", error);
+    }
+  });
+
+  socket.on("webrtc-ice", async data => {
+    if(!data || !data.from || !data.candidate) return;
+
+    const pc = peerConnections.get(data.from);
+    if(!pc) return;
+
+    try{
+      await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+    }catch(error){
+      console.error("ICE_ERROR", error);
+    }
+  });
+
+  socket.on("chat", data => {
+    if(!data) return;
+
+    const name = data.user || "زائر";
+    addMessage(name + ": " + (data.text || ""));
+  });
+
+  socket.on("gift", data => {
+    if(!data) return;
+
+    addMessage(
+      "🎁 " + (data.user || "زائر") + " أرسل هدية: " +
+      (data.text || "🎁 هدية"),
+      "gift"
+    );
+  });
+}
+
+joinBtn.addEventListener("click", async () => {
+  connectSocket();
+
+  currentRole = roleSelect.value === "host" ? "host" : "viewer";
+  currentUser = userName.value.trim();
+
+  if(!currentUser){
+    userName.focus();
+    addMessage("⚠️ من فضلك اكتب اسم المستخدم أولاً.", "system");
+    return;
+  }
+
+  if(currentUser.length > 50){
+    userName.focus();
+    addMessage("⚠️ اسم المستخدم يجب ألا يتجاوز 50 حرفًا.", "system");
+    return;
+  }
+
+  roleBadge.textContent =
+    currentRole === "host" ? "👑 مضيف" : "👁️ مشاهد";
+
+  if(!socket.connected){
+    addMessage("⏳ جاري الاتصال بالسيرفر...", "system");
+
+    await new Promise(resolve => {
+      const timer = setInterval(() => {
+        if(socket.connected){
+          clearInterval(timer);
+          resolve();
+        }
+      },100);
+
+      setTimeout(() => {
+        clearInterval(timer);
+        resolve();
+      },5000);
+    });
+  }
+
+  if(!socket.connected){
+    addMessage("⚠️ تعذر الاتصال بالسيرفر.", "system");
+    return;
+  }
+
+  socket.emit("join-room", {
+    room:ROOM_ID,
+    user:currentUser,
+    role:currentRole
+  });
+
+  joined = true;
+  joinBtn.disabled = true;
+  roleSelect.disabled = true;
+  userName.disabled = true;
+
+  if(currentRole === "host"){
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    viewerVideoWrap.classList.add("hidden");
+    addMessage("👑 تم دخول غرفة المضيف.", "system");
+  }else{
+    startBtn.disabled = true;
+    stopBtn.disabled = true;
+    viewerVideoWrap.classList.remove("hidden");
+
+    setTimeout(() => {
+      socket.emit("request-host");
+    },500);
+
+    addMessage("👁️ تم دخول الغرفة كمشاهد.", "system");
+  }
+});
+
+startBtn.addEventListener("click", async () => {
+  if(!joined || currentRole !== "host") return;
+
+  const ready = await startCamera();
+  if(!ready) return;
+
+  socket.emit("start-broadcast");
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+});
+
+stopBtn.addEventListener("click", () => {
+  if(!joined || currentRole !== "host") return;
+
+  socket.emit("stop-broadcast");
+  stopCamera();
+  closeAllPeers();
+
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+});
+
+function sendChat(){
+  const text = chatInput.value.trim();
+  if(!text || !socket || !joined) return;
+
+  socket.emit("chat", text);
+  chatInput.value = "";
+  chatInput.focus();
+}
+
+chatBtn.addEventListener("click", sendChat);
+
+chatInput.addEventListener("keydown", event => {
+  if(event.key === "Enter"){
+    event.preventDefault();
+    sendChat();
+  }
+});
+
+document.querySelectorAll("[data-gift]").forEach(button => {
+  button.addEventListener("click", () => {
+    if(!socket || !joined){
+      alert("ادخل الغرفة أولاً.");
+      return;
+    }
+
+    socket.emit("gift", button.dataset.gift);
+  });
+});
+
+document.querySelectorAll(".nav-item").forEach(item => {
+  item.addEventListener("click", function(){
+
+    document.querySelectorAll(".nav-item")
+      .forEach(nav => nav.classList.remove("active"));
+
+    this.classList.add("active");
+
+    const nav = this.dataset.nav;
+
+    if(nav === "home"){
+      window.scrollTo({top:0,behavior:"smooth"});
+    }else if(nav === "discover"){
+      addMessage("🔎 قسم الاكتشاف: البثوث المتاحة تظهر هنا.", "system");
+    }else if(nav === "live"){
+      window.scrollTo({top:0,behavior:"smooth"});
+    }else if(nav === "messages"){
+      alert("💬 صندوق الرسائل: خدمة الرسائل جاهزة للربط.");
+    }else if(nav === "account"){
+      alert(
+        "👤 حسابك في لكس | LIVE\n" +
+        "المستخدم: " + currentUser + "\n" +
+        "الدور: " +
+        (currentRole === "host" ? "مضيف" : "مشاهد")
+      );
+    }
+  });
+});
+
+$("lexSharePageButton").addEventListener("click", async () => {
+
+  const url = window.location.href;
+  const title = document.title || "لكس | LIVE";
+  const text = "شاهد منصة لكس | LIVE";
+
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title,
+        text,
+        url
+      });
+      return;
+    }catch(error){
+      if(error && error.name === "AbortError") return;
+    }
+  }
+
+  const message = text + "\n\n" + url;
+
+  const choice = prompt(
+    "اختر طريقة المشاركة:\n\n" +
+    "1 - واتساب\n" +
+    "2 - البريد الإلكتروني\n" +
+    "3 - نسخ الرابط\n\n" +
+    "أدخل الرقم:",
+    "1"
+  );
+
+  if(choice === "1"){
+    window.open(
+      "https://wa.me/?text=" +
+      encodeURIComponent(message),
+      "_blank"
+    );
+  }else if(choice === "2"){
+    window.location.href =
+      "mailto:?subject=" +
+      encodeURIComponent(title) +
+      "&body=" +
+      encodeURIComponent(message);
+  }else if(choice === "3"){
+    try{
+      await navigator.clipboard.writeText(url);
+      alert("تم نسخ رابط الصفحة بنجاح.");
+    }catch(error){
+      prompt("انسخ الرابط:",url);
+    }
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  try{
+    if(socket && joined) socket.emit("leave-room");
+  }catch(error){}
+
+  closeAllPeers();
+  stopCamera();
+});
+
+connectSocket();
+
 })();
 </script>
 
