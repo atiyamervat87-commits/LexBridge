@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LIVE PLATFORM</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#08090d;color:#fff}
+body{overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.screen{min-height:100vh;padding:24px 18px 100px}
+.center-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:min(460px,100%);background:#14161d;border:1px solid #292d38;border-radius:26px;padding:28px;box-shadow:0 20px 60px #0008}
+.logo{width:68px;height:68px;border-radius:22px;background:#e51e46;display:grid;place-items:center;font-size:32px;margin:0 auto 20px}
+h1,h2,h3,p{margin-top:0}
+.title{text-align:center;font-size:27px;margin-bottom:10px}
+.sub{text-align:center;color:#9da3b2;line-height:1.8;margin-bottom:26px}
+.primary{width:100%;border:0;border-radius:16px;padding:15px;background:#e51e46;color:#fff;font-weight:800}
+.secondary{width:100%;border:1px solid #343946;border-radius:16px;padding:14px;background:#1a1c24;color:#fff}
+.input{width:100%;padding:15px;border-radius:15px;border:1px solid #343946;background:#0e1016;color:#fff;outline:0;margin-bottom:14px}
+.app{display:none}
+.header{padding:18px;position:sticky;top:0;z-index:20;background:#08090dee;border-bottom:1px solid #20232c;backdrop-filter:blur(18px)}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:42px;height:42px;border-radius:14px;background:#e51e46;display:grid;place-items:center}
+.brand-title{font-size:17px;font-weight:800}
+.brand-sub{font-size:11px;color:#8f95a3;margin-top:3px}
+.connection{font-size:11px;color:#aeb4c1}
+.main{padding:20px 16px 100px}
+.screen-page{display:none}
+.screen-page.active{display:block}
+.hero{padding:25px 20px;border-radius:24px;background:linear-gradient(135deg,#1b1d26,#292d38);margin-bottom:22px}
+.hero h1{font-size:26px;margin-bottom:8px}
+.hero p{color:#aeb4c1;margin:0;line-height:1.7}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 12px}
+.section-title h2{font-size:19px}
+.section-title span{font-size:12px;color:#8f95a3}
+.rooms{display:grid;gap:14px}
+.room{background:#151821;border:1px solid #292d38;border-radius:21px;padding:17px;transition:.15s}
+.room:active{transform:scale(.98)}
+.room-top{display:flex;justify-content:space-between;align-items:center}
+.avatar{width:54px;height:54px;border-radius:18px;background:#222632;display:grid;place-items:center;font-size:28px}
+.live{color:#ff5272;font-size:12px;font-weight:800}
+.room h2{font-size:18px;margin:14px 0 5px}
+.room p{color:#9da3b2;margin:0;font-size:13px}
+.empty{background:#14161d;border:1px solid #292d38;border-radius:22px;padding:45px 20px;text-align:center;color:#aeb4c1}
+.profile{display:flex;align-items:center;gap:14px;background:#14161d;border:1px solid #292d38;border-radius:22px;padding:20px;margin-bottom:16px}
+.profile-avatar{width:60px;height:60px;border-radius:20px;background:#242834;display:grid;place-items:center;font-size:30px}
+.profile small{display:block;color:#969dac;margin-top:5px}
+.status{display:grid;gap:12px}
+.status-card{background:#14161d;border:1px solid #292d38;border-radius:18px;padding:17px}
+.status-card small{display:block;color:#8f95a3;margin-bottom:7px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:100;background:#0c0e13f5;border-top:1px solid #292d38;backdrop-filter:blur(18px);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.bottom-inner{display:grid;grid-template-columns:repeat(4,1fr);max-width:600px;margin:auto}
+.nav{border:0;background:none;color:#858b99;padding:8px 3px;font-size:11px}
+.nav span{display:block;font-size:20px;margin-bottom:3px}
+.nav.active{color:#fff}
+#chat{display:none}
+</style>
+</head>
+<body>
+
+<!-- شاشة الصلاحيات -->
+<section id="permissionScreen" class="center-screen">
+  <div class="card">
+    <div class="logo">🔴</div>
+    <h1 class="title">LIVE PLATFORM</h1>
+    <p class="sub">قبل الدخول، وافق على صلاحيات الكاميرا والميكروفون حتى تتمكن من استخدام البث المباشر.</p>
+    <button id="permissionDone" class="primary" type="button">تم</button>
+  </div>
+</section>
+
+<!-- شاشة الدخول -->
+<section id="loginScreen" class="center-screen" style="display:none">
+  <div class="card">
+    <div class="logo">👤</div>
+    <h1 class="title">تسجيل الدخول</h1>
+    <p class="sub">اكتب اسمك للدخول إلى منصة البث.</p>
+    <input id="loginName" class="input" type="text" placeholder="اسم المستخدم" autocomplete="off">
+    <button id="loginBtn" class="primary" type="button">دخول</button>
+  </div>
+</section>
+
+<!-- التطبيق -->
+<div id="app" class="app">
+  <header class="header">
+    <div class="header-row">
+      <div class="brand">
+        <div class="brand-mark">🔴</div>
+        <div>
+          <div class="brand-title">LIVE PLATFORM</div>
+          <div class="brand-sub">بث مباشر وتواصل لحظي</div>
+        </div>
+      </div>
+      <div id="connection" class="connection">
+        <span id="connectionText">جاري الاتصال</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <section id="homeScreen" class="screen-page active">
+      <div class="hero">
+        <h1>اكتشف البث المباشر</h1>
+        <p>ادخل غرفة، شاهد البث، وتفاعل مع الآخرين في الوقت الحقيقي.</p>
+      </div>
+
+      <div class="section-title">
+        <h2>🔴 مباشر الآن</h2>
+        <span>اكتشف الغرف</span>
+      </div>
+
+      <div class="rooms">
+        <div class="room" onclick="openRoom('الغرفة الأولى','👩🏻‍🎤')">
+          <div class="room-top"><div class="avatar">👩🏻‍🎤</div><span class="live">● مباشر</span></div>
+          <h2>الغرفة الأولى</h2><p>🎙️ مضيف مباشر</p>
+        </div>
+
+        <div class="room" onclick="openRoom('الغرفة الثانية','👨🏻‍🎤')">
+          <div class="room-top"><div class="avatar">👨🏻‍🎤</div><span class="live">● مباشر</span></div>
+          <h2>الغرفة الثانية</h2><p>👥 24 مشاهد</p>
+        </div>
+
+        <div class="room" onclick="openRoom('غرفة الأصدقاء','🎙️')">
+          <div class="room-top"><div class="avatar">🎙️</div><span class="live">● مباشر</span></div>
+          <h2>غرفة الأصدقاء</h2><p>👥 12 مشاهد</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="discoverScreen" class="screen-page">
+      <div class="section-title"><h2>🔎 اكتشاف</h2><span>مباشر الآن</span></div>
+      <div class="rooms">
+        <div class="room" onclick="openRoom('الغرفة الأولى','👩🏻‍🎤')">
+          <div class="room-top"><div class="avatar">👩🏻‍🎤</div><span class="live">● مباشر</span></div>
+          <h2>الغرفة الأولى</h2><p>🎙️ مضيف مباشر</p>
+        </div>
+        <div class="room" onclick="openRoom('الغرفة الثانية','👨🏻‍🎤')">
+          <div class="room-top"><div class="avatar">👨🏻‍🎤</div><span class="live">● مباشر</span></div>
+          <h2>الغرفة الثانية</h2><p>👥 24 مشاهد</p>
+        </div>
+        <div class="room" onclick="openRoom('غرفة الأصدقاء','🎙️')">
+          <div class="room-top"><div class="avatar">🎙️</div><span class="live">● مباشر</span></div>
+          <h2>غرفة الأصدقاء</h2><p>👥 12 مشاهد</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="messagesScreen" class="screen-page">
+      <div class="section-title"><h2>💬 الرسائل</h2><span>التواصل</span></div>
+      <div class="empty"><div style="font-size:44px">💬</div><h3>لا توجد رسائل جديدة</h3><p>ستظهر محادثاتك هنا.</p></div>
+    </section>
+
+    <section id="accountScreen" class="screen-page">
+      <div class="profile">
+        <div class="profile-avatar">👤</div>
+        <div><strong id="accountUser">زائر</strong><small>حساب منصة البث</small></div>
+      </div>
+      <div class="status">
+        <div class="status-card"><small>الحالة</small><div>متصل</div></div>
+        <div class="status-card"><small>الغرفة الحالية</small><div id="accountRoom">لا توجد غرفة</div></div>
+        <div class="status-card"><small>الاتصال بالخادم</small><div id="accountConnection">جاري الفحص...</div></div>
+      </div>
+    </section>
+
+    <!-- منطقة الغرفة الأصلية -->
+    <section id="chat">
+      <div class="room-shell">
+        <div class="room-header">
+          <div class="room-title-wrap"><h2 id="roomTitle"></h2><p>الغرفة المباشرة</p></div>
+          <button class="secondary" type="button" onclick="closeRoom()">✕</button>
+        </div>
+
+        <div id="liveMedia">
+          <div class="media-stage">
+            <div class="media-empty" id="mediaEmpty"><div><strong>📺 منطقة البث</strong><span>سيظهر الفيديو هنا عند بدء البث.</span></div></div>
+            <video id="localVideo" autoplay muted playsinline></video>
+            <div id="webrtcDebug"><b>WEBRTC DEBUG</b><div id="webrtcDebugLog">جاهز...</div></div>
+            <div id="remoteVideos"></div>
+          </div>
+          <div class="media-controls">
+            <button class="primary" type="button" onclick="startBroadcast()">📹 تشغيل الكاميرا والميكروفون</button>
+            <button class="secondary" type="button" onclick="stopBroadcast()">⛔ إيقاف البث</button>
+          </div>
+        </div>
+
+        <div id="roomStatus">
+          <div class="status">
+            <div class="status-card"><small>حالة البث</small><div id="liveStatus">⚫ غير متصل</div></div>
+            <div class="status-card"><small>المضيف</small><div id="hostStatus">لا يوجد</div></div>
+            <div class="status-card"><small>المشاهدون</small><div id="viewerStatus">0</div></div>
+          </div>
+        </div>
+
+        <div class="chat-area">
+          <p>💬 المحادثة</p>
+          <div id="log"></div>
+          <div class="chat-compose">
+            <input id="msg" class="input" placeholder="اكتب رسالتك..." autocomplete="off">
+            <button class="primary" onclick="send()">إرسال</button>
+          </div>
+          <button class="secondary" onclick="gift()">🎁 هدية</button>
+          <button class="secondary" onclick="closeRoom()">رجوع</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom">
+    <div class="bottom-inner">
+      <button class="nav active" type="button" data-screen="home"><span>🏠</span>الرئيسية</button>
+      <button class="nav" type="button" data-screen="discover"><span>🔎</span>اكتشاف</button>
+      <button class="nav" type="button" data-screen="messages"><span>💬</span>الرسائل</button>
+      <button class="nav" type="button" data-screen="account"><span>👤</span>حسابي</button>
+    </div>
+  </nav>
+</div>
+
+<script>
+document.getElementById("permissionDone").addEventListener("click", async () => {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("المتصفح لا يدعم صلاحيات الكاميرا والميكروفون.");
+    } else {
+      const stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+      stream.getTracks().forEach(t => t.stop());
+    }
+  } catch (e) {
+    console.warn("PERMISSION_REQUEST:", e);
+  }
+  document.getElementById("permissionScreen").style.display="none";
+  document.getElementById("loginScreen").style.display="flex";
+});
+</script>
+
+<script>
+let currentRoom="";
+let user="";
+
+function showScreen(name){
+  // إخفاء كل الصفحات
+  document.querySelectorAll(".screen-page").forEach(x=>{
+    x.classList.remove("active");
+  });
+
+  // إخفاء غرفة البث عند استخدام شريط التنقل
+  const chat = document.getElementById("chat");
+  if(chat) chat.style.display = "none";
+
+  // إظهار الصفحة المطلوبة
+  const target = document.getElementById(name + "Screen");
+  if(target) target.classList.add("active");
+
+  // تحديث الزر النشط
+  document.querySelectorAll(".nav").forEach(x=>{
+    x.classList.toggle("active", x.dataset.screen === name);
+  });
+
+  // تحديث بيانات الحساب
+  if(name === "account"){
+    const u = document.getElementById("accountUser");
+    const r = document.getElementById("accountRoom");
+    const c = document.getElementById("accountConnection");
+
+    if(u) u.textContent = user || "زائر";
+    if(r) r.textContent = currentRoom || "لا توجد غرفة";
+
+    if(c){
+      c.textContent =
+        typeof socket !== "undefined" && socket.connected
+          ? "🟢 متصل بالخادم"
+          : "🔴 غير متصل بالخادم";
+    }
+  }
+}
+
+document.querySelectorAll(".nav").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const name = btn.dataset.screen;
+    if(name) showScreen(name);
+  });
+});
+
+document.getElementById("loginBtn").addEventListener("click",()=>{
+  const value=document.getElementById("loginName").value.trim();
+  if(!value){
+    alert("اكتب اسم المستخدم أولاً.");
+    return;
+  }
+  user=value;
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("app").style.display="block";
+  showScreen("home");
+});
+
+document.getElementById("loginName").addEventListener("keydown",e=>{
+  if(e.key==="Enter") document.getElementById("loginBtn").click();
+});
+
+function openRoom(room,avatar){
+  currentRoom=room;
+
+  const choice=document.createElement("div");
+  choice.className="entry-modal";
+  choice.style.cssText="position:fixed;inset:0;z-index:99999;background:#000b;display:grid;place-items:center;padding:20px";
+  choice.innerHTML=`
+    <div style="width:min(420px,100%);background:#151821;border:1px solid #303542;border-radius:24px;padding:24px;text-align:center">
+      <div style="font-size:45px">${avatar}</div>
+      <h2>${room}</h2>
+      <p style="color:#aeb4c1">اختر طريقة الدخول إلى الغرفة</p>
+      <button type="button" id="hostBtn" class="primary">👑 دخول كمضيف</button>
+      <br><br>
+      <button type="button" id="viewerBtn" class="secondary">👥 دخول كمشاهد</button>
+      <br><br>
+      <button type="button" id="cancelBtn" class="secondary">إلغاء</button>
+    </div>`;
+  document.body.appendChild(choice);
+
+  const enter=role=>{
+    choice.remove();
+    const title=document.getElementById("roomTitle");
+    const panel=document.getElementById("chat");
+    const logBox=document.getElementById("log");
+
+    if(title) title.textContent=avatar+" "+room;
+    if(panel) panel.style.display="block";
+    if(logBox) logBox.innerHTML="";
+
+    if(!socket.connected){
+      alert("الاتصال بالخادم غير متاح.");
+      return;
+    }
+
+    socket.emit("join-room",{room,user,role});
+    if(role==="viewer") setTimeout(()=>socket.emit("request-host"),500);
+  };
+
+  document.getElementById("hostBtn").onclick=()=>enter("host");
+  document.getElementById("viewerBtn").onclick=()=>enter("viewer");
+  document.getElementById("cancelBtn").onclick=()=>choice.remove();
+}
+
+function closeRoom(){
+  if(typeof socket !== "undefined" && socket.connected){
+    socket.emit("leave-room");
+  }
+
+  const panel = document.getElementById("chat");
+  const logBox = document.getElementById("log");
+
+  if(panel) panel.style.display = "none";
+  if(logBox) logBox.innerHTML = "";
+
+  currentRoom = "";
+
+  const accountRoom = document.getElementById("accountRoom");
+  if(accountRoom) accountRoom.textContent = "لا توجد غرفة";
+
+  showScreen("home");
+}
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket=io({
+    transports:["websocket","polling"],
+    upgrade:true,
+    rememberUpgrade:true,
+    reconnection:true,
+    reconnectionAttempts:Infinity,
+    reconnectionDelay:1000,
+    reconnectionDelayMax:5000,
+    timeout:20000
+});
+
+socket.on("connect",()=>{
+    console.log("SOCKET_CONNECTED",socket.id);
+});
+
+socket.on("connect_error",err=>{
+    console.error("SOCKET_CONNECT_ERROR",err);
+});
+
+socket.on("disconnect",reason=>{
+    console.warn("SOCKET_DISCONNECTED",reason);
+});
+
+function webRTCLog(...args){
+    console.log(...args);
+
+    const box=document.getElementById("webrtcDebugLog");
+    if(!box) return;
+
+    const line=document.createElement("div");
+    line.textContent=new Date().toLocaleTimeString()+" | "+args.map(x=>{
+        try{
+            return typeof x==="string" ? x : JSON.stringify(x);
+        }catch{
+            return String(x);
+        }
+    }).join(" ");
+
+    box.appendChild(line);
+
+    while(box.children.length > 80){
+        box.removeChild(box.firstChild);
+    }
+
+    box.scrollTop=box.scrollHeight;
+}
+
+webRTCLog("DEBUG_READY");
+
+const peers = new Map();
+const pendingIce = new Map();
+const remoteDescriptionsReady = new Set();
+let localStream = null;
+
+async function startBroadcast(){
+    if(!currentRoom) {
+        alert("ادخل غرفة أولاً.");
+        return;
+    }
+
+    try{
+        webRTCLog("GET_USER_MEDIA_START");
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:true
+        });
+
+        const video=document.getElementById("localVideo");
+        video.srcObject=localStream;
+        video.style.display="block";
+
+        webRTCLog("START_BROADCAST_EMIT");
+        socket.emit("start-broadcast");
+        await flushPendingViewers();
+        alert("📹 تم تشغيل الكاميرا والميكروفون.");
+    }catch(err){
+        console.error(err);
+        alert("تعذر الوصول إلى الكاميرا أو الميكروفون.");
+    }
+}
+
+function stopBroadcast(){
+    if(localStream){
+        localStream.getTracks().forEach(track=>track.stop());
+        localStream=null;
+    }
+
+    const video=document.getElementById("localVideo");
+    if(video){
+        video.srcObject=null;
+        video.style.display="none";
+    }
+
+    for(const pc of peers.values()) pc.close();
+    peers.clear();
+}
+
+async function createPeer(targetId){
+    if(peers.has(targetId)) return peers.get(targetId);
+
+    const pc=new RTCPeerConnection({
+        iceServers:[
+            {urls:"stun:stun.l.google.com:19302"}
+        ]
+    });
+
+    peers.set(targetId,pc);
+    pendingIce.set(targetId, []);
+    remoteDescriptionsReady.delete(targetId);
+
+    if(localStream){
+        for(const track of localStream.getTracks()){
+            pc.addTrack(track,localStream);
+        }
+    }
+
+    pc.onicecandidate=e=>{
+        if(e.candidate){
+            webRTCLog("WEBRTC_ICE_SEND", targetId, e.candidate.candidate);
+            socket.emit("webrtc-ice",{
+                to:targetId,
+                candidate:e.candidate
+            });
+        } else {
+            webRTCLog("WEBRTC_ICE_COMPLETE", targetId);
+        }
+    };
+
+    pc.oniceconnectionstatechange=()=>{
+        webRTCLog("WEBRTC_ICE_STATE", targetId, pc.iceConnectionState);
+    };
+
+    pc.onconnectionstatechange=()=>{
+        webRTCLog("WEBRTC_CONNECTION_STATE", targetId, pc.connectionState);
+    };
+
+    pc.onsignalingstatechange=()=>{
+        webRTCLog("WEBRTC_SIGNALING_STATE", targetId, pc.signalingState);
+    };
+
+    pc.ontrack=async e=>{
+        webRTCLog("WEBRTC_ONTRACK", targetId, e.streams?.length, e.track?.kind, e.track?.readyState);
+
+        let v=document.getElementById("remote-"+targetId);
+
+        if(!v){
+            v=document.createElement("video");
+            v.id="remote-"+targetId;
+            v.autoplay=true;
+            v.playsInline=true;
+            v.style.cssText=
+                "width:100%;max-height:320px;background:#000;border-radius:18px";
+            document.getElementById("remoteVideos").appendChild(v);
+        }
+
+        v.srcObject=e.streams[0];
+
+        const empty=document.getElementById("mediaEmpty");
+        if(empty) empty.style.display="none";
+        v.style.display="block";
+
+        try{
+            await v.play();
+        }catch(err){
+            console.warn("REMOTE_VIDEO_PLAY:",err);
+        }
+    };
+
+    return pc;
+}
+
+const pendingViewers = new Map();
+
+async function connectViewer(viewerId, viewerName){
+    if(!viewerId) return;
+
+    if(!localStream){
+        webRTCLog("WEBRTC_QUEUE_VIEWER", viewerId);
+        pendingViewers.set(viewerId, viewerName || "مشاهد");
+        return;
+    }
+
+    webRTCLog("WEBRTC_CREATE_OFFER", viewerId);
+
+    try{
+        const pc = await createPeer(viewerId);
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        webRTCLog("WEBRTC_OFFER_SEND", viewerId);
+
+        socket.emit("webrtc-offer", {
+            to: viewerId,
+            offer: offer
+        });
+    }catch(err){
+        webRTCLog("WEBRTC_OFFER_ERROR", viewerId, err);
+    }
+}
+
+async function flushPendingViewers(){
+    if(!localStream || !pendingViewers.size) return;
+
+    const viewers = [...pendingViewers.entries()];
+    pendingViewers.clear();
+
+    for(const [viewerId, viewerName] of viewers){
+        await connectViewer(viewerId, viewerName);
+    }
+}
+
+socket.on("viewer-ready", async data=>{
+    webRTCLog("WEBRTC_VIEWER_READY", data);
+    await connectViewer(data?.viewerId, data?.viewerName);
+});
+
+socket.on("webrtc-offer",async data=>{
+    console.log("WEBRTC_OFFER_RECEIVED:", data?.from);
+
+    if(!data?.from) return;
+
+    const pc=await createPeer(data.from);
+
+    await pc.setRemoteDescription(
+        new RTCSessionDescription(data.offer)
+    );
+
+    remoteDescriptionsReady.add(data.from);
+
+    const queued=pendingIce.get(data.from) || [];
+    for(const candidate of queued){
+        try{
+            await pc.addIceCandidate(
+                new RTCIceCandidate(candidate)
+            );
+        }catch(err){
+            console.error("QUEUED_ICE_ERROR:",err);
+        }
+    }
+    pendingIce.set(data.from, []);
+
+    const answer=await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+
+    socket.emit("webrtc-answer",{
+        to:data.from,
+        answer:answer
+    });
+});
+
+socket.on("webrtc-answer",async data=>{
+    console.log("WEBRTC_ANSWER_RECEIVED:", data?.from);
+
+    const pc=peers.get(data?.from);
+    if(!pc) return;
+
+    await pc.setRemoteDescription(
+        new RTCSessionDescription(data.answer)
+    );
+
+    remoteDescriptionsReady.add(data.from);
+
+    const queued=pendingIce.get(data.from) || [];
+    for(const candidate of queued){
+        try{
+            await pc.addIceCandidate(
+                new RTCIceCandidate(candidate)
+            );
+        }catch(err){
+            console.error("QUEUED_ICE_ERROR:",err);
+        }
+    }
+    pendingIce.set(data.from, []);
+});
+
+socket.on("webrtc-ice",async data=>{
+    console.log("WEBRTC_ICE_RECEIVED:", data?.from);
+
+    const from=data?.from;
+    const candidate=data?.candidate;
+    if(!from || !candidate) return;
+
+    const pc=peers.get(from);
+
+    if(!pc || !pc.remoteDescription){
+        if(!pendingIce.has(from)) pendingIce.set(from,[]);
+        pendingIce.get(from).push(candidate);
+        return;
+    }
+
+    try{
+        await pc.addIceCandidate(
+            new RTCIceCandidate(candidate)
+        );
+    }catch(err){
+        console.error("ICE_ERROR:",err);
+    }
+});
+
+</script>
+
+
+
+<script>
+/* ===== CONNECTION RECOVERY ===== */
+
+function updateConnectionUI(text){
+  const el = document.getElementById("connectionText");
+  if(el) el.textContent = text;
+
+  const account = document.getElementById("accountConnection");
+  if(account){
+    account.textContent =
+      (typeof socket !== "undefined" && socket.connected)
+        ? "🟢 متصل بالخادم"
+        : "🔴 غير متصل بالخادم";
+  }
+}
+
+if(typeof socket !== "undefined"){
+
+  socket.on("connect", ()=>{
+    console.log("SOCKET_CONNECTED:", socket.id);
+    updateConnectionUI("🟢 متصل");
+
+    // إذا كان المستخدم داخل غرفة، أعد الانضمام بعد عودة الاتصال
+    if(currentRoom && user){
+      console.log("REJOIN_AFTER_RECONNECT:", {
+        room: currentRoom,
+        user: user
+      });
+
+      socket.emit("join-room",{
+        room: currentRoom,
+        user: user,
+        role: window.currentRole || "viewer"
+      });
+    }
+  });
+
+  socket.on("disconnect",(reason)=>{
+    console.log("SOCKET_DISCONNECTED:", reason);
+    updateConnectionUI("🔴 إعادة الاتصال...");
+  });
+
+  socket.on("connect_error",(err)=>{
+    console.warn("SOCKET_CONNECT_ERROR:", err && err.message);
+    updateConnectionUI("🟠 محاولة الاتصال...");
+  });
+
+  socket.io.on("reconnect_attempt",(attempt)=>{
+    console.log("SOCKET_RECONNECT_ATTEMPT:", attempt);
+    updateConnectionUI("🟠 إعادة الاتصال...");
+  });
+
+  socket.io.on("reconnect", (attempt)=>{
+    console.log("SOCKET_RECONNECTED:", attempt);
+    updateConnectionUI("🟢 متصل");
+  });
+}
+</script>
+
+</body>

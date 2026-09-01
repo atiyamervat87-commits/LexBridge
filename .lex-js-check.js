@@ -1,435 +1,6 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
-<title>لكس | LIVE</title>
 
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
 
-html,body{
-    width:100%;
-    min-height:100%;
-    background:#08090d;
-    color:#fff;
-    font-family:Arial,Tahoma,sans-serif;
-}
-
-body{
-    overflow-x:hidden;
-}
-
-button{
-    font:inherit;
-    border:0;
-    cursor:pointer;
-}
-
-#app{
-    min-height:100vh;
-    background:
-        radial-gradient(
-            circle at 50% -15%,
-            #30202d 0,
-            #15131a 35%,
-            #08090d 72%
-        );
-}
-
-/* ===== TOP ===== */
-
-.topbar{
-    height:64px;
-    padding:9px 14px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    position:sticky;
-    top:0;
-    z-index:50;
-
-    background:rgba(8,9,13,.9);
-    backdrop-filter:blur(18px);
-
-    border-bottom:1px solid rgba(255,255,255,.07);
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.brand-logo{
-    width:42px;
-    height:42px;
-
-    border-radius:14px;
-
-    display:grid;
-    place-items:center;
-
-    background:linear-gradient(
-        135deg,
-        #ff315e,
-        #ff174d
-    );
-
-    font-size:21px;
-
-    box-shadow:
-        0 6px 22px rgba(255,30,80,.3);
-}
-
-.brand-name{
-    font-size:18px;
-    font-weight:900;
-}
-
-.brand-sub{
-    margin-top:2px;
-    color:#8e8e99;
-    font-size:9px;
-}
-
-.top-actions{
-    display:flex;
-    gap:8px;
-}
-
-.icon-btn{
-    width:40px;
-    height:40px;
-
-    border-radius:50%;
-
-    background:#18181f;
-    color:#fff;
-
-    display:grid;
-    place-items:center;
-
-    font-size:18px;
-}
-
-/* ===== CONTENT ===== */
-
-.content{
-    padding:18px 13px 100px;
-    max-width:1000px;
-    margin:auto;
-}
-
-.welcome{
-    margin-bottom:18px;
-}
-
-.welcome h1{
-    font-size:27px;
-    font-weight:900;
-    margin-bottom:6px;
-}
-
-.welcome p{
-    color:#92929d;
-    font-size:13px;
-}
-
-/* ===== TABS ===== */
-
-.tabs{
-    display:flex;
-    gap:8px;
-
-    overflow-x:auto;
-
-    scrollbar-width:none;
-
-    margin-bottom:18px;
-}
-
-.tabs::-webkit-scrollbar{
-    display:none;
-}
-
-.tab{
-    flex:none;
-
-    padding:9px 17px;
-
-    border-radius:22px;
-
-    background:#17171e;
-    color:#91919c;
-
-    font-size:12px;
-    font-weight:700;
-}
-
-.tab.active{
-    background:#ff2456;
-    color:#fff;
-
-    box-shadow:
-        0 5px 18px rgba(255,36,86,.25);
-}
-
-/* ===== SECTION ===== */
-
-.section-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    margin:5px 2px 13px;
-}
-
-.section-header h2{
-    font-size:18px;
-    font-weight:900;
-}
-
-.section-header span{
-    color:#777782;
-    font-size:11px;
-}
-
-/* ===== LIVE GRID ===== */
-
-.live-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:12px;
-}
-
-/* ===== CARD ===== */
-
-.live-card{
-    position:relative;
-
-    height:250px;
-
-    overflow:hidden;
-
-    border-radius:21px;
-
-    background:#17171e;
-
-    border:1px solid rgba(255,255,255,.07);
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.3);
-
-    transition:
-        transform .15s ease;
-}
-
-.live-card:active{
-    transform:scale(.97);
-}
-
-.cover{
-    position:absolute;
-    inset:0;
-
-    display:grid;
-    place-items:center;
-
-    font-size:70px;
-
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            #464651,
-            #191920 58%,
-            #0b0b10
-        );
-}
-
-.live-card::after{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:
-        linear-gradient(
-            to bottom,
-            transparent 30%,
-            rgba(0,0,0,.05) 45%,
-            rgba(0,0,0,.94) 100%
-        );
-}
-
-/* LIVE */
-
-.live-badge{
-    position:absolute;
-
-    top:10px;
-    right:10px;
-
-    z-index:3;
-
-    padding:5px 9px;
-
-    border-radius:8px;
-
-    background:#ff2456;
-
-    color:#fff;
-
-    font-size:9px;
-    font-weight:900;
-}
-
-/* VIEWERS */
-
-.viewer{
-    position:absolute;
-
-    top:10px;
-    left:10px;
-
-    z-index:3;
-
-    padding:5px 8px;
-
-    border-radius:8px;
-
-    background:rgba(0,0,0,.5);
-
-    font-size:10px;
-}
-
-/* INFO */
-
-.card-info{
-    position:absolute;
-
-    right:11px;
-    left:11px;
-    bottom:11px;
-
-    z-index:4;
-}
-
-.host{
-    font-size:15px;
-    font-weight:900;
-
-    margin-bottom:5px;
-}
-
-.description{
-    color:#c2c2ca;
-    font-size:10px;
-}
-
-/* ===== BOTTOM ===== */
-
-.bottom{
-    position:fixed;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:70px;
-
-    z-index:100;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(5,1fr);
-
-    padding:
-        6px 8px
-        calc(6px + env(safe-area-inset-bottom));
-
-    background:rgba(11,11,16,.95);
-
-    backdrop-filter:blur(20px);
-
-    border-top:1px solid rgba(255,255,255,.07);
-}
-
-.nav{
-    background:none;
-    color:#777782;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    gap:4px;
-
-    font-size:9px;
-}
-
-.nav-icon{
-    font-size:20px;
-    line-height:1;
-}
-
-.nav.active{
-    color:#fff;
-}
-
-.live-button{
-    width:49px;
-    height:49px;
-
-    margin-top:-22px;
-
-    border-radius:50%;
-
-    border:4px solid #08090d;
-
-    display:grid;
-    place-items:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff315e,
-            #ff174d
-        );
-
-    color:#fff;
-
-    font-size:22px;
-
-    box-shadow:
-        0 7px 25px rgba(255,30,80,.35);
-}
-
-/* ===== DESKTOP ===== */
-
-@media(min-width:700px){
-
-    .live-grid{
-        grid-template-columns:
-            repeat(4,minmax(0,1fr));
-    }
-
-}
-</style>
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
 window.socket = io({
     transports: ["websocket", "polling"],
     reconnection: true,
@@ -450,312 +21,9 @@ window.socket.on("connect_error", function (err) {
 window.socket.on("disconnect", function (reason) {
     console.warn("LEX_SOCKET_DISCONNECTED:", reason);
 });
-</script>
 
 
-<style id="malik-advisor-style">
-#malikAdvisorBtn{
-    width:52px;
-    min-height:52px;
-    padding:6px;
-    border:1px solid rgba(255,255,255,.22);
-    border-radius:50%;
-    background:linear-gradient(145deg,#262633,#15151c);
-    color:#fff;
-    font-size:22px;
-    line-height:1;
-    cursor:pointer;
-    box-shadow:0 8px 24px rgba(0,0,0,.35);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:transform .18s ease,box-shadow .18s ease;
-}
-#malikAdvisorBtn:active{
-    transform:scale(.94);
-}
-#malikAdvisorBtn:hover{
-    box-shadow:0 10px 28px rgba(0,0,0,.5);
-}
-</style>
 
-</head>
-
-<body>
-
-<div id="app">
-
-<header class="topbar">
-
-    <div class="brand">
-
-        <div class="brand-logo">
-            ⚡
-        </div>
-
-        <div>
-            <div class="brand-name">
-                لكس
-            </div>
-
-            <div class="brand-sub">
-                بث مباشر وتواصل لحظي
-            </div>
-        </div>
-
-    </div>
-
-    <div class="top-actions">
-
-        <button class="icon-btn">
-            🔎
-        </button>
-
-        <button class="icon-btn">
-            🔔
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="content">
-
-    <section class="welcome">
-
-        <h1>
-            البث المباشر
-        </h1>
-
-        <p>
-            اكتشف البثوث المباشرة وتفاعل مع المضيفين
-        </p>
-
-    </section>
-
-
-    <div class="tabs">
-
-        <button class="tab active">
-            🔴 مباشر
-        </button>
-
-        <button class="tab">
-            ⭐ المميز
-        </button>
-
-        <button class="tab">
-            🎤 المواهب
-        </button>
-
-        <button class="tab">
-            👥 أصدقاء
-        </button>
-
-        <button class="tab">
-            🌍 الجميع
-        </button>
-
-    </div>
-
-
-    <div class="section-header">
-
-        <h2>
-            🔴 مباشر الآن
-        </h2>
-
-        <span>
-            عرض الكل
-        </span>
-
-    </div>
-
-
-    <section class="live-grid">
-
-        <article class="live-card">
-
-            <div class="cover">
-                👩🏻‍🎤
-            </div>
-
-            <span class="live-badge">
-                LIVE
-            </span>
-
-            <span class="viewer">
-                👁 128
-            </span>
-
-            <div class="card-info">
-
-                <div class="host">
-                    الغرفة الأولى
-                </div>
-
-                <div class="description">
-                    🎙️ بث مباشر الآن
-                </div>
-
-            </div>
-
-        </article>
-
-
-        <article class="live-card">
-
-            <div class="cover">
-                👨🏻‍🎤
-            </div>
-
-            <span class="live-badge">
-                LIVE
-            </span>
-
-            <span class="viewer">
-                👁 246
-            </span>
-
-            <div class="card-info">
-
-                <div class="host">
-                    الغرفة الثانية
-                </div>
-
-                <div class="description">
-                    🎤 لقاء مباشر
-                </div>
-
-            </div>
-
-        </article>
-
-
-        <article class="live-card">
-
-            <div class="cover">
-                🎙️
-            </div>
-
-            <span class="live-badge">
-                LIVE
-            </span>
-
-            <span class="viewer">
-                👁 82
-            </span>
-
-            <div class="card-info">
-
-                <div class="host">
-                    غرفة الأصدقاء
-                </div>
-
-                <div class="description">
-                    👥 تفاعل مباشر
-                </div>
-
-            </div>
-
-        </article>
-
-
-        <article class="live-card">
-
-            <div class="cover">
-                ⭐
-            </div>
-
-            <span class="live-badge">
-                LIVE
-            </span>
-
-            <span class="viewer">
-                👁 391
-            </span>
-
-            <div class="card-info">
-
-                <div class="host">
-                    غرفة النجوم
-                </div>
-
-                <div class="description">
-                    ✨ بث مميز
-                </div>
-
-            </div>
-
-        </article>
-
-    </section>
-
-</main>
-
-
-<nav class="bottom">
-
-    <button class="nav active">
-
-        <span class="nav-icon">
-            🏠
-        </span>
-
-        الرئيسية
-
-    </button>
-
-
-    <button class="nav">
-
-        <span class="nav-icon">
-            🔎
-        </span>
-
-        اكتشاف
-
-    </button>
-
-
-    <button class="nav">
-
-        <span class="live-button">
-            📹
-        </span>
-
-        بث مباشر
-
-    </button>
-
-
-    <button class="nav">
-
-        <span class="nav-icon">
-            💬
-        </span>
-
-        الرسائل
-
-    </button>
-
-
-    <button class="nav">
-
-        <span class="nav-icon">
-            👤
-        </span>
-
-        حسابي
-
-    </button>
-
-</nav>
-
-</div>
-
-<script>
 function initChatSystem() {
     const sendBtn = document.getElementById('roomSendBtn') || document.querySelector('.room-send');
     const inputField = document.getElementById('roomInput') || document.querySelector('.room-input');
@@ -787,9 +55,9 @@ function initChatSystem() {
 }
 // تشغيل النظام عند فتح الغرفة
 document.addEventListener('DOMContentLoaded', initChatSystem);
-</script>
 
-<script>
+
+
 window.addEventListener('DOMContentLoaded', () => {
     // إزالة نصوص الـ CSS المتناثرة إن وجدت
     document.querySelectorAll('*').forEach(el => {
@@ -814,19 +82,8 @@ window.addEventListener('DOMContentLoaded', () => {
             newBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 
-                // محاولة تشغيل الكاميرا لو المتصفح يسمح
-                try {
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                        const videoEl = document.querySelector('video, .room-video');
-                        if (videoEl) {
-                            videoEl.srcObject = stream;
-                            videoEl.play();
-                        }
-                    }
-                } catch (err) {
-                    console.log("Media permissions bypassed for local testing.");
-                }
+                // الكاميرا والميكروفون معطّلان في LexBridge.
+                // لا يتم طلب أي صلاحيات للأجهزة.
 
                 // تفعيل حالة البث فوراً بغض النظر عن أذونات الجهاز
                 newBtn.textContent = '⏹️ إيقاف البث';
@@ -853,10 +110,9 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-</script>
 
 
-<script>
+
 window.addEventListener('DOMContentLoaded', () => {
     // البحث عن أي عنصر مكتوب عليه "بث مباشر" أو أيقونة الكاميرا/البث في القوائم
     document.querySelectorAll('a, button, div, span').forEach(el => {
@@ -883,50 +139,9 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-</script>
 
 
-<style>
-  :root {
-    --primary-color: #ff2a5f;
-    --secondary-color: #7928ca;
-    --bg-dark: #0f1016;
-    --card-bg: #181925;
-    --text-main: #ffffff;
-    --text-muted: #8f92a1;
-  }
-  body {
-    background-color: var(--bg-dark) !important;
-    color: var(--text-main) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }
-  /* تحسين بطاقات الغرف لتكون أكثر احترافية */
-  .room-card, .room-item {
-    background: var(--card-bg) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-  .room-card:active {
-    transform: scale(0.98);
-    border-color: var(--primary-color);
-  }
-  /* شريط التنقل السفلي الاحترافي */
-  .nav-bar, nav, .footer-nav {
-    background: rgba(15, 16, 22, 0.95) !important;
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  /* الأزرار العصرية */
-  button, .btn {
-    border-radius: 12px !important;
-    font-weight: 600 !important;
-    transition: all 0.2s ease;
-  }
-</style>
 
-<script>
 window.addEventListener('DOMContentLoaded', () => {
     // 1. تنظيف أي نصوص CSS ظاهرة بالخطأ
     document.querySelectorAll('*').forEach(el => {
@@ -983,32 +198,9 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-</script>
 
 
-<div id="malikAdvisorModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:20px;">
-  <div style="width:min(430px,100%);background:#15151c;color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.45);text-align:center;direction:rtl;">
-    <div style="font-size:42px;margin-bottom:8px;">⚖️</div>
-    <h2 style="margin:0 0 10px;">مستشارك مالك</h2>
-    <p style="line-height:1.9;margin:0 0 18px;">
-      👋 أهلاً بيك<br>
-      أنا مالك، مستشارك الذكي، وموجود علشان أساعدك في احتياجك.
-    </p>
-    <p style="line-height:1.8;color:#ddd;">
-      قولّي محتاج إيه، وأنا أساعدك وأوجّهك للطريق المناسب.
-    </p>
-    <div style="display:flex;gap:10px;margin-top:20px;">
-      <button type="button" onclick="openMalikChat()" style="flex:1;padding:13px;border:0;border-radius:14px;cursor:pointer;">
-        💬 تحدث مع مالك
-      </button>
-      <button type="button" onclick="closeMalikAdvisor()" style="flex:1;padding:13px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#fff;border-radius:14px;cursor:pointer;">
-        إغلاق
-      </button>
-    </div>
-  </div>
-</div>
 
-<script>
 function openMalikAdvisor(){
   const m=document.getElementById("malikAdvisorModal");
   if(m) m.style.display="flex";
@@ -1048,924 +240,141 @@ document.addEventListener("click",function(e){
   const m=document.getElementById("malikAdvisorModal");
   if(e.target===m) closeMalikAdvisor();
 });
-</script>
 
-</body>
-</html>
-<!-- =========================
-     LEX LIVE ROOM
-========================= -->
 
-<style>
 
-#liveRoom{
-    display:none;
 
-    position:fixed;
-    inset:0;
+(function(){
 
-    z-index:500;
+    const spirit = document.getElementById("lexSpirit");
+    const title = document.getElementById("lexSpiritTitle");
+    const text = document.getElementById("lexSpiritText");
 
-    background:#050507;
+    let spiritTimer = null;
 
-    color:#fff;
+    window.lexSpirit = function(message, heading){
 
-    overflow:hidden;
-}
+        if(!spirit || !text) return;
 
-/* ===== VIDEO AREA ===== */
+        if(heading)
+            title.textContent = heading;
 
-.room-video{
-    position:absolute;
-    inset:0;
+        text.textContent = message;
 
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            #30303a,
-            #101016 55%,
-            #050507
-        );
+        spirit.style.display = "block";
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
+        clearTimeout(spiritTimer);
 
-#remoteVideos{
-    position:absolute;
-    inset:0;
+        spiritTimer = setTimeout(function(){
+            spirit.style.display = "none";
+        }, 6500);
+    };
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    document.addEventListener("DOMContentLoaded", function(){
 
-    background:#000;
-}
+        setTimeout(function(){
 
-#remoteVideos video{
-    width:100%;
-    height:100%;
+            window.lexSpirit(
+                "أهلاً بك في الهلباوي LexBridge. اختر ما تريد، وأنا سأرشدك للخطوة المناسبة.",
+                "⚡ روح LexBridge"
+            );
 
-    object-fit:cover;
+        }, 900);
 
-    background:#000;
-}
+    });
 
-/* الفيديو المحلي */
+    window.addEventListener("beforeunload", function(){
 
-#localVideo{
-    position:absolute;
+        try{
+            sessionStorage.setItem(
+                "lexbridge_last_visit",
+                Date.now().toString()
+            );
+        }catch(e){}
 
-    right:14px;
-    bottom:145px;
+    });
 
-    width:105px;
-    height:145px;
+})();
 
-    object-fit:cover;
 
-    border-radius:16px;
 
-    background:#15151b;
 
-    border:2px solid rgba(255,255,255,.35);
 
-    z-index:20;
+(function(){
 
-    display:none;
-}
-
-/* حالة عدم وجود بث */
-
-.room-empty{
-    position:absolute;
-
-    inset:0;
-
-    display:flex;
-    flex-direction:column;
-
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    background:
-        radial-gradient(
-            circle,
-            #25252e,
-            #08080c 70%
-        );
-}
-
-.room-empty-icon{
-    width:82px;
-    height:82px;
-
-    border-radius:28px;
-
-    display:grid;
-    place-items:center;
-
-    background:#1b1b22;
-
-    font-size:39px;
-
-    margin-bottom:15px;
-}
-
-.room-empty h2{
-    font-size:20px;
-    margin-bottom:7px;
-}
-
-.room-empty p{
-    color:#9999a4;
-    font-size:12px;
-}
-
-/* ===== TOP ROOM BAR ===== */
-
-.room-top{
-    position:absolute;
-
-    top:0;
-    left:0;
-    right:0;
-
-    z-index:30;
-
-    padding:
-        12px
-        13px
-        15px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.7),
-            transparent
-        );
-}
-
-.room-host{
-    display:flex;
-    align-items:center;
-
-    gap:9px;
-}
-
-.room-avatar{
-    width:43px;
-    height:43px;
-
-    border-radius:50%;
-
-    display:grid;
-    place-items:center;
-
-    background:#292933;
-
-    border:2px solid rgba(255,255,255,.35);
-
-    font-size:22px;
-}
-
-.room-host-info{
-    min-width:0;
-}
-
-.room-host-name{
-    font-size:14px;
-    font-weight:900;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-.room-live-line{
-    margin-top:3px;
-
-    display:flex;
-    align-items:center;
-
-    gap:6px;
-
-    color:#c5c5ce;
-
-    font-size:10px;
-}
-
-.live-dot{
-    width:7px;
-    height:7px;
-
-    border-radius:50%;
-
-    background:#ff2456;
-
-    box-shadow:
-        0 0 10px #ff2456;
-}
-
-.room-viewers{
-    padding:7px 10px;
-
-    border-radius:18px;
-
-    background:rgba(0,0,0,.5);
-
-    backdrop-filter:blur(10px);
-
-    font-size:10px;
-}
-
-/* زر الخروج */
-
-.room-close{
-    position:absolute;
-
-    top:13px;
-    left:13px;
-
-    width:39px;
-    height:39px;
-
-    z-index:40;
-
-    border-radius:50%;
-
-    background:rgba(0,0,0,.5);
-
-    color:#fff;
-
-    font-size:18px;
-}
-
-/* ===== FLOATING COMMENTS ===== */
-
-.room-comments{
-    position:absolute;
-
-    right:12px;
-    left:12px;
-
-    bottom:150px;
-
-    z-index:25;
-
-    height:190px;
-
-    overflow:hidden;
-
-    pointer-events:none;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:flex-end;
-
-    gap:7px;
-}
-
-.comment{
-    width:max-content;
-
-    max-width:82%;
-
-    padding:8px 11px;
-
-    border-radius:16px;
-
-    background:rgba(0,0,0,.52);
-
-    backdrop-filter:blur(10px);
-
-    font-size:11px;
-
-    animation:
-        commentIn .25s ease;
-}
-
-.comment strong{
-    color:#ff7895;
-
-    margin-left:4px;
-}
-
-@keyframes commentIn{
-
-    from{
-        opacity:0;
-        transform:translateY(15px);
+    function safeSpirit(msg, title){
+        if(typeof window.lexSpirit === "function"){
+            window.lexSpirit(msg, title);
+        }
     }
 
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    document.addEventListener("click", function(e){
+
+        const id = e.target && e.target.id;
+
+        if(id === "startBroadcastBtn"){
+            safeSpirit(
+                "ابدأ عندما تكون جاهزًا. سأساعدك في التأكد من الصوت والصورة واتصال الغرفة.",
+                "🔴 تجهيز البث"
+            );
+        }
+
+        if(id === "stopBroadcastBtn"){
+            safeSpirit(
+                "تم إيقاف البث. يمكنك العودة للغرفة أو الانتقال إلى خدمة أخرى.",
+                "⛔ انتهى البث"
+            );
+        }
+
+        if(id === "cameraBtn"){
+            safeSpirit(
+                "الكاميرا تحت سيطرتك. يمكنك تشغيلها أو إيقافها في أي وقت أثناء البث.",
+                "📷 الكاميرا"
+            );
+        }
+
+        if(id === "micBtn"){
+            safeSpirit(
+                "الميكروفون تحت سيطرتك. يمكنك الكتم أو إعادة الصوت في أي وقت.",
+                "🎙️ الميكروفون"
+            );
+        }
+
+        if(id === "likeBtn"){
+            safeSpirit(
+                "إعجابك وصل للمضيف ❤️",
+                "❤️ تفاعل"
+            );
+        }
+
+        if(id === "giftBtn"){
+            safeSpirit(
+                "اختر الهدية التي تريد إرسالها.",
+                "🎁 هدية"
+            );
+        }
+
+        if(id === "shareBtn"){
+            safeSpirit(
+                "يمكنك مشاركة الغرفة مع من تريد.",
+                "↗️ مشاركة"
+            );
+        }
+
+        if(id === "malikAdvisorBtn"){
+            safeSpirit(
+                "مالك موجود لمساعدتك عندما تحتاج إلى إرشاد.",
+                "⚖️ المستشار مالك"
+            );
+        }
+
+    });
+
+})();
 
-}
 
-/* ===== RIGHT ACTIONS ===== */
 
-.room-actions{
-    position:absolute;
 
-    left:11px;
-
-    bottom:155px;
-
-    z-index:35;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:14px;
-}
-
-.room-action{
-    width:45px;
-    height:45px;
-
-    border-radius:50%;
-
-    background:rgba(0,0,0,.48);
-
-    backdrop-filter:blur(10px);
-
-    color:#fff;
-
-    display:grid;
-    place-items:center;
-
-    font-size:20px;
-}
-
-.room-action-label{
-    color:#fff;
-
-    font-size:8px;
-
-    margin-top:-10px;
-
-    text-shadow:
-        0 1px 5px #000;
-}
-
-/* ===== BOTTOM ROOM PANEL ===== */
-
-.room-bottom{
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    z-index:40;
-
-    padding:
-        12px
-        12px
-        calc(
-            12px +
-            env(safe-area-inset-bottom)
-        );
-
-    background:
-        linear-gradient(
-            to top,
-            rgba(0,0,0,.9),
-            rgba(0,0,0,.45),
-            transparent
-        );
-}
-
-.room-input-row{
-    display:flex;
-
-    gap:8px;
-
-    align-items:center;
-}
-
-.room-input{
-    flex:1;
-
-    height:44px;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    border-radius:23px;
-
-    padding:0 15px;
-
-    outline:none;
-
-    background:rgba(255,255,255,.09);
-
-    color:#fff;
-
-    backdrop-filter:blur(12px);
-
-    font-size:12px;
-}
-
-.room-input::placeholder{
-    color:#aaaab3;
-}
-
-.room-send{
-    width:44px;
-    height:44px;
-
-    flex:none;
-
-    border-radius:50%;
-
-    background:#ff2456;
-
-    color:#fff;
-
-    font-size:17px;
-}
-
-/* ===== HOST CONTROLS ===== */
-
-.host-controls{
-    display:none;
-
-    margin-bottom:9px;
-
-    gap:7px;
-
-    overflow-x:auto;
-
-    scrollbar-width:none;
-}
-
-.host-controls::-webkit-scrollbar{
-    display:none;
-}
-
-.host-control{
-    flex:none;
-
-    padding:8px 12px;
-
-    border-radius:18px;
-
-    background:rgba(0,0,0,.55);
-
-    border:1px solid rgba(255,255,255,.1);
-
-    color:#fff;
-
-    font-size:10px;
-}
-
-.host-control.live{
-    background:#ff2456;
-
-    border-color:#ff2456;
-}
-
-/* ===== GIFT PANEL ===== */
-
-.gift-panel{
-    display:none;
-
-    position:absolute;
-
-    left:10px;
-    right:10px;
-    bottom:75px;
-
-    z-index:60;
-
-    padding:15px;
-
-    border-radius:22px;
-
-    background:
-        rgba(20,20,27,.96);
-
-    border:1px solid rgba(255,255,255,.1);
-
-    box-shadow:
-        0 15px 50px #000b;
-}
-
-.gift-title{
-    font-size:13px;
-    font-weight:900;
-
-    margin-bottom:12px;
-}
-
-.gift-grid{
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:8px;
-}
-
-.gift-item{
-    min-height:65px;
-
-    border-radius:14px;
-
-    background:#191920;
-
-    color:#fff;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:4px;
-
-    font-size:10px;
-}
-
-.gift-item span{
-    font-size:25px;
-}
-
-/* ===== HEART ANIMATION ===== */
-
-.heart{
-    position:absolute;
-
-    left:30px;
-    bottom:170px;
-
-    z-index:80;
-
-    font-size:27px;
-
-    pointer-events:none;
-
-    animation:
-        heartFloat 1.4s ease forwards;
-}
-
-@keyframes heartFloat{
-
-    0%{
-        opacity:0;
-        transform:
-            translateY(0)
-            scale(.5);
-    }
-
-    15%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateY(-190px)
-            translateX(35px)
-            scale(1.35);
-    }
-
-}
-
-/* ===== DESKTOP ROOM ===== */
-
-@media(min-width:700px){
-
-    #liveRoom{
-        background:#050507;
-    }
-
-    .room-video{
-        width:600px;
-        left:50%;
-        right:auto;
-
-        transform:translateX(-50%);
-    }
-
-    .room-top{
-        width:600px;
-
-        left:50%;
-        right:auto;
-
-        transform:translateX(-50%);
-    }
-
-    .room-bottom{
-        width:600px;
-
-        left:50%;
-        right:auto;
-
-        transform:translateX(-50%);
-    }
-
-}
-
-</style>
-
-
-<!-- =========================
-     LIVE ROOM HTML
-========================= -->
-
-<section id="liveRoom">
-
-    <!-- VIDEO -->
-
-    <div class="room-video">
-
-        <div id="remoteVideos"></div>
-
-        <div
-            id="roomEmpty"
-            class="room-empty"
-        >
-
-            <div class="room-empty-icon">
-                📺
-            </div>
-
-            <h2 id="roomEmptyTitle">
-                البث المباشر
-            </h2>
-
-            <p>
-                في انتظار بدء البث...
-            </p>
-
-        </div>
-
-        <video
-            id="localVideo"
-            autoplay
-            muted
-            playsinline
-        ></video>
-
-    </div>
-
-
-    <!-- TOP -->
-
-    <div class="room-top">
-
-        <div class="room-host">
-
-            <div
-                id="roomAvatar"
-                class="room-avatar"
-            >
-                🎙️
-            </div>
-
-            <div class="room-host-info">
-
-                <div
-                    id="roomHostName"
-                    class="room-host-name"
-                >
-                    المضيف
-                </div>
-
-                <div class="room-live-line">
-
-                    <span class="live-dot"></span>
-
-                    <span id="roomLiveText">
-                        مباشر الآن
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div
-                id="roomViewers"
-                class="room-viewers"
-            >
-                👁 0
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CLOSE -->
-
-    <button
-        class="room-close"
-        id="roomCloseBtn"
-        type="button"
-    >
-        ✕
-    </button>
-
-
-    <!-- COMMENTS -->
-
-    <div
-        id="roomComments"
-        class="room-comments"
-    ></div>
-
-
-    <!-- ACTIONS -->
-
-    <div class="room-actions">
-<button id="malikAdvisorBtn" type="button" onclick="openMalikAdvisor()">
-  ⚖️ مستشارك مالك
-</button>
-
-
-        <button
-            class="room-action"
-            id="likeBtn"
-            type="button"
-        >
-            ❤️
-        </button>
-
-        <span class="room-action-label">
-            إعجاب
-        </span>
-
-
-        <button
-            class="room-action"
-            id="giftBtn"
-            type="button"
-        >
-            🎁
-        </button>
-
-        <span class="room-action-label">
-            هدية
-        </span>
-
-
-        <button
-            class="room-action"
-            id="shareBtn"
-            type="button"
-        >
-            ↗️
-        </button>
-
-        <span class="room-action-label">
-            مشاركة
-        </span>
-
-    </div>
-
-
-    <!-- GIFT PANEL -->
-
-    <div
-        id="giftPanel"
-        class="gift-panel"
-    >
-
-        <div class="gift-title">
-            🎁 اختر هدية
-        </div>
-
-        <div class="gift-grid">
-
-            <button
-                class="gift-item"
-                data-gift="🌹"
-            >
-                <span>🌹</span>
-                وردة
-            </button>
-
-            <button
-                class="gift-item"
-                data-gift="❤️"
-            >
-                <span>❤️</span>
-                قلب
-            </button>
-
-            <button
-                class="gift-item"
-                data-gift="⭐"
-            >
-                <span>⭐</span>
-                نجمة
-            </button>
-
-            <button
-                class="gift-item"
-                data-gift="👑"
-            >
-                <span>👑</span>
-                تاج
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- BOTTOM -->
-
-    <div class="room-bottom">
-
-        <!-- HOST CONTROLS -->
-
-        <div
-            id="hostControls"
-            class="host-controls"
-        >
-
-            <button
-                id="startBroadcastBtn"
-                class="host-control live"
-                type="button"
-            >
-                📹 بدء البث
-            </button>
-
-            <button
-                id="stopBroadcastBtn"
-                class="host-control"
-                type="button"
-            >
-                ⛔ إيقاف
-            </button>
-
-            <button
-                id="cameraBtn"
-                class="host-control"
-                type="button"
-            >
-                📷 الكاميرا
-            </button>
-
-            <button
-                id="micBtn"
-                class="host-control"
-                type="button"
-            >
-                🎙️ الميكروفون
-            </button>
-
-        </div>
-
-
-        <!-- CHAT -->
-
-        <div class="room-input-row">
-
-            <input
-                id="roomMessage"
-                class="room-input"
-                type="text"
-                placeholder="اكتب تعليقًا..."
-                autocomplete="off"
-            >
-
-            <button
-                id="roomSendBtn"
-                class="room-send"
-                type="button"
-            >
-                ➤
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-<script>
 /* =========================================================
    LEX LIVE — ROOM UI CONTROLLER
    الجزء الثالث
@@ -2510,80 +919,19 @@ document.addEventListener("click",function(e){
 
 
     /* =====================================================
-       CAMERA
+       CAMERA / MICROPHONE — DISABLED
+       LexBridge broadcast does not request device media.
     ===================================================== */
 
-    const cameraButton =
-        $("cameraBtn");
+    const cameraButton = $("cameraBtn");
+    const micButton = $("micBtn");
 
     if(cameraButton){
-
-        cameraButton.addEventListener(
-            "click",
-            function(){
-
-                if(!lexLocalStream)
-                    return;
-
-                lexCameraOn =
-                    !lexCameraOn;
-
-                lexLocalStream
-                    .getVideoTracks()
-                    .forEach(function(track){
-
-                        track.enabled =
-                            lexCameraOn;
-
-                    });
-
-                cameraButton.textContent =
-                    lexCameraOn
-                        ? "📷 الكاميرا"
-                        : "🚫 الكاميرا";
-
-            }
-        );
-
+        cameraButton.style.display = "none";
     }
 
-
-    /* =====================================================
-       MICROPHONE
-    ===================================================== */
-
-    const micButton =
-        $("micBtn");
-
     if(micButton){
-
-        micButton.addEventListener(
-            "click",
-            function(){
-
-                if(!lexLocalStream)
-                    return;
-
-                lexMicOn =
-                    !lexMicOn;
-
-                lexLocalStream
-                    .getAudioTracks()
-                    .forEach(function(track){
-
-                        track.enabled =
-                            lexMicOn;
-
-                    });
-
-                micButton.textContent =
-                    lexMicOn
-                        ? "🎙️ الميكروفون"
-                        : "🔇 الميكروفون";
-
-            }
-        );
-
+        micButton.style.display = "none";
     }
 
 
@@ -2608,26 +956,17 @@ document.addEventListener("click",function(e){
     }
 
 
+
     async function startBroadcast(){
 
         if(lexRole !== "host"){
-
-            alert(
-                "بدء البث متاح للمضيف فقط."
-            );
-
+            alert("بدء البث متاح للمضيف فقط.");
             return;
-
         }
 
         if(!lexRoom){
-
-            alert(
-                "ادخل غرفة أولاً."
-            );
-
+            alert("ادخل غرفة أولاً.");
             return;
-
         }
 
         try{
@@ -2636,47 +975,27 @@ document.addEventListener("click",function(e){
                 !navigator.mediaDevices ||
                 !navigator.mediaDevices.getUserMedia
             ){
-
-                alert(
-                    "الكاميرا والميكروفون غير مدعومين."
-                );
-
+                alert("الجهاز أو المتصفح لا يدعم الكاميرا والميكروفون.");
                 return;
-
             }
 
             lexLocalStream =
-                await navigator.mediaDevices.getUserMedia(
-                    {
-                        video:true,
-                        audio:true
-                    }
-                );
+                await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
 
-            const video =
-                $("localVideo");
+            const video = $("localVideo");
 
             if(video){
-
-                video.srcObject =
-                    lexLocalStream;
-
-                video.style.display =
-                    "block";
+                video.srcObject = lexLocalStream;
+                video.style.display = "block";
 
                 try{
-
                     await video.play();
-
                 }catch(error){
-
-                    console.warn(
-                        "LOCAL_VIDEO_PLAY",
-                        error
-                    );
-
+                    console.warn("LOCAL_VIDEO_PLAY", error);
                 }
-
             }
 
             lexBroadcasting = true;
@@ -2686,39 +1005,28 @@ document.addEventListener("click",function(e){
                 window.socket &&
                 window.socket.connected
             ){
-
-                window.socket.emit(
-                    "start-broadcast"
-                );
-
+                window.socket.emit("start-broadcast");
             }
 
             if($("roomEmpty"))
-                $("roomEmpty").style.display =
-                    "none";
+                $("roomEmpty").style.display = "none";
 
             updateHostButtons();
 
             addComment(
                 "النظام",
-                "📹 بدأ المضيف البث المباشر"
+                "⚡ بدأ البث المباشر بالصوت والصورة"
             );
 
         }catch(error){
 
-            console.error(
-                "START_BROADCAST_ERROR",
-                error
-            );
+            console.error("START_BROADCAST_ERROR", error);
 
             alert(
-                "تعذر تشغيل الكاميرا أو الميكروفون."
+                "تعذر تشغيل الكاميرا أو الميكروفون. تأكد من منح صلاحية الوصول للجهاز."
             );
-
         }
-
     }
-
 
     /* =====================================================
        STOP BROADCAST
@@ -3034,8 +1342,9 @@ document.addEventListener("click",function(e){
 
 
 })();
-</script>
-<script>
+
+
+
 /* =========================================================
    LEX LIVE — PLATFORM NAVIGATION BRIDGE
    الجزء الرابع
@@ -3557,8 +1866,9 @@ document.addEventListener("click",function(e){
 
 
 })();
-</script>
-<script>
+
+
+
 /* =========================================================
    LEX LIVE — VISUAL UI ENHANCEMENT
    الجزء السادس
@@ -4518,5 +2828,3 @@ document.addEventListener("click",function(e){
 
 
 })();
-</script>
-

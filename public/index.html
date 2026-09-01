@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لكس | LIVE - منصة البث الاحترافية</title>
+    <style>
+        :root {
+            --primary: #ff2a5f;
+            --secondary: #7928ca;
+            --bg-dark: #0f1016;
+            --card-bg: #181925;
+            --text-main: #ffffff;
+            --text-muted: #8f92a1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        header {
+            background: rgba(15, 16, 22, 0.95);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h2 { font-size: 20px; color: var(--primary); }
+        .container { padding: 15px; }
+        .room-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .btn-live {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 42, 95, 0.4);
+        }
+        .comments-box {
+            background: #12131c;
+            border-radius: 12px;
+            padding: 10px;
+            height: 120px;
+            overflow-y: auto;
+            margin-top: 10px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 16, 22, 0.98);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+        .nav-item { color: var(--text-muted); text-align: center; font-size: 12px; text-decoration: none; cursor: pointer; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>🎥 لكس | LIVE</h2>
+        <span>🔴 متصل</span>
+    </header>
+
+    <div class="container">
+        <div class="room-card">
+            <h3 style="margin-bottom: 5px;">الغرفة الرئيسية للمضيف</h3>
+            <p style="color: var(--text-muted); font-size: 13px;">تفاعل مع المتابعين وادرس إعدادات البث بجودة عالية.</p>
+            
+            <div class="comments-box" id="roomComments">
+                <div style="color: #2ecc71;">⚡ النظام: مرحباً بك في غرفة البث المباشر.</div>
+            </div>
+
+            <button class="btn-live" id="broadcastBtn" onclick="toggleBroadcast()">بدء البث المباشر 🔴</button>
+        </div>
+    </div>
+
+
+    <!-- مستشار مالك + مستودع البرامج -->
+    <div class="room-card" style="margin-top:15px;">
+        <h3 style="margin-bottom:8px;">⚖️ خدمات لكس</h3>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:10px;">
+            خدمات إضافية للمستخدمين
+        </p>
+
+        <button class="btn-live"
+                onclick="window.location.href='/malik-chat.html'">
+            ⚖️ تحدث مع المستشار مالك
+        </button>
+
+        <button class="btn-live"
+                style="background:linear-gradient(135deg,#0066cc,#00a8ff);"
+                onclick="window.location.href='/software-store.html'">
+            📦 مستودع البرامج
+        </button>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active">🏠 الرئيسية</div>
+        <div class="nav-item">🔎 اكتشاف</div>
+        <div class="nav-item" onclick="alert('منصة لكس للبث المباشر - الإصدار الاحترافي 2026')">📹 بث مباشر</div>
+        <div class="nav-item">💬 الرسائل</div>
+        <div class="nav-item">👤 حسابي</div>
+    </div>
+
+    <script>
+        let isLive = false;
+        function toggleBroadcast() {
+            const btn = document.getElementById('broadcastBtn');
+            const comments = document.getElementById('roomComments');
+            
+            isLive = !isLive;
+            if(isLive) {
+                btn.textContent = '⏹️ إيقاف البث';
+                btn.style.background = 'linear-gradient(135deg, #ff416c, #ff4b2b)';
+                const msg = document.createElement('div');
+                msg.style.color = '#2ecc71';
+                msg.style.marginTop = '6px';
+                msg.innerHTML = '🔴 النظام: بدأ البث المباشر بنجاح وتفعيل غرفة المضيف!';
+                comments.appendChild(msg);
+                comments.scrollTop = comments.scrollHeight;
+            } else {
+                btn.textContent = 'بدء البث المباشر 🔴';
+                btn.style.background = 'linear-gradient(135deg, #ff2a5f, #7928ca)';
+                const msg = document.createElement('div');
+                msg.style.color = '#e74c3c';
+                msg.style.marginTop = '6px';
+                msg.innerHTML = '⏹️ النظام: تم إيقاف البث المؤقت.';
+                comments.appendChild(msg);
+                comments.scrollTop = comments.scrollHeight;
+            }
+        }
+    </script>
+
+<div class="room-card" style="margin-top: 15px;">
+    <h4 style="margin-bottom: 8px; color: #ff2a5f;">🎁 هدايا وتفاعل المتابعين</h4>
+    <div style="display: flex; gap: 8px; justify-content: space-between;">
+        <button onclick="sendGift('🌹 وردة')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">🌹 وردة</button>
+        <button onclick="sendGift('💎 ماسة')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">💎 ماسة</button>
+        <button onclick="sendGift('🚀 صاروخ')" style="flex: 1; background: #252636; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; cursor: pointer;">🚀 صاروخ</button>
+    </div>
+</div>
+<script>
+const randomUsers = ['أحمد المصري', 'سارة البث', 'محمد علي', 'ريم 👑', 'فهد الكاسر'];
+const randomComments = [
+    'منور يا أسطورة البث! 🔥',
+    'أحلى بث والله 🚀',
+    'ممكن تفتح الغرفة التالية؟',
+    'صوتك واضح وجميل 👏',
+    'تم إرسال أحلى هدية للمضيف ❤️'
+];
+let chatInterval = null;
+
+function startChatSimulation() {
+    if (chatInterval) clearInterval(chatInterval);
+    chatInterval = setInterval(() => {
+        if (!isLive) return;
+        const commentsBox = document.getElementById('roomComments');
+        if (!commentsBox) return;
+        const randomUser = randomUsers[Math.floor(Math.random() * randomUsers.length)];
+        const randomMsg = randomComments[Math.floor(Math.random() * randomComments.length)];
+        const msgDiv = document.createElement('div');
+        msgDiv.style.margin = '4px 0';
+        msgDiv.innerHTML = `<b style="color: #ff2a5f;">${randomUser}:</b> <span style="color: #fff;">${randomMsg}</span>`;
+        commentsBox.appendChild(msgDiv);
+        commentsBox.scrollTop = commentsBox.scrollHeight;
+    }, 3000);
+}
+
+function sendGift(giftName) {
+    if (!isLive) {
+        alert('الرجاء بدء البث أولاً لتتمكن من تلقي الهدايا!');
+        return;
+    }
+    const commentsBox = document.getElementById('roomComments');
+    if (!commentsBox) return;
+    const msgDiv = document.createElement('div');
+    msgDiv.style.cssText = 'color: #f1c40f; font-weight: bold; margin: 5px 0; background: rgba(241, 196, 15, 0.1); padding: 6px; border-radius: 6px;';
+    msgDiv.innerHTML = `🎁 تفاعل النظام: تلقيت هدية (${giftName}) من أحد المعجبين!`;
+    commentsBox.appendChild(msgDiv);
+    commentsBox.scrollTop = commentsBox.scrollHeight;
+}
+
+const originalToggle = window.toggleBroadcast;
+window.toggleBroadcast = function() {
+    originalToggle();
+    if(isLive) {
+        startChatSimulation();
+    } else {
+        if(chatInterval) clearInterval(chatInterval);
+    }
+}
+</script>
+
+
+<script>
+// تفعيل التنقل بين الأزرار السفلية
+const navItems = document.querySelectorAll('.nav-item');
+navItems.forEach((item, index) => {
+    item.addEventListener('click', function() {
+        // إزالة التحديد عن الكل
+        navItems.forEach(nav => nav.classList.remove('active'));
+        // تحديد العنصر الحالي
+        this.classList.add('active');
+
+        // التعامل مع الوظائف بناءً على الزر المضغوط
+        const text = this.innerText;
+        if(text.includes('حسابي')) {
+            alert('👤 حساب المضيف: لكس | LIVE\nالمستوى: VIP 🌟\nالمتابعين: 14.5K\nالأرباح: 3,200 ماسة');
+        } else if(text.includes('الرسائل')) {
+            alert('💬 صندوق الرسائل:\n- رسالة جديدة من الدعم الفني\n- 3 رسائل غير منقوشة من المعجبين');
+        } else if(text.includes('اكتشاف')) {
+            alert('🔎 قسم الاكتشاف:\nجارٍ البحث عن البثوك الرائجة الآن... (البثوث نشطة حالياً)');
+        } else if(text.includes('بث مباشر')) {
+            alert('📹 أنت الآن بالفعل في غرفة البث المباشر الخاصة بك!');
+        } else if(text.includes('الرئيسية')) {
+            // العودة للصفحة الرئيسية للبث
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+});
+</script>
+
+
+<style>
+#lexSharePageButton{
+  position:fixed;
+  top:16px;
+  left:16px;
+  z-index:9999;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:14px;
+  padding:10px 14px;
+  background:#15151c;
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+#lexSharePageButton:active{
+  transform:scale(.97);
+}
+</style>
+
+<button id="lexSharePageButton" type="button" aria-label="مشاركة الصفحة">
+  📤 مشاركة
+</button>
+
+<script>
+(function(){
+  const btn = document.getElementById("lexSharePageButton");
+  if(!btn) return;
+
+  btn.addEventListener("click", async function(){
+    const url = window.location.href;
+    const title = document.title || "لكس | LIVE";
+    const text = "شاهد منصة لكس | LIVE";
+
+    if(navigator.share){
+      try{
+        await navigator.share({
+          title: title,
+          text: text,
+          url: url
+        });
+        return;
+      }catch(e){
+        if(e && e.name === "AbortError") return;
+      }
+    }
+
+    const message =
+      text + "\\n\\n" + url;
+
+    const choice = prompt(
+      "اختر طريقة المشاركة:\\n\\n" +
+      "1 - واتساب\\n" +
+      "2 - البريد الإلكتروني\\n" +
+      "3 - نسخ الرابط\\n\\n" +
+      "أدخل الرقم:",
+      "1"
+    );
+
+    if(choice === "1"){
+      window.open(
+        "https://wa.me/?text=" + encodeURIComponent(message),
+        "_blank"
+      );
+    }else if(choice === "2"){
+      window.location.href =
+        "mailto:?subject=" +
+        encodeURIComponent(title) +
+        "&body=" +
+        encodeURIComponent(message);
+    }else if(choice === "3"){
+      try{
+        await navigator.clipboard.writeText(url);
+        alert("تم نسخ رابط الصفحة بنجاح.");
+      }catch(e){
+        prompt("انسخ الرابط:", url);
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
