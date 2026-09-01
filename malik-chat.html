@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>⚖️ مستشارك مالك | لكس</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#0f1016;color:#fff;
+ font-family:Arial,Tahoma,sans-serif;
+ min-height:100vh;
+}
+.wrap{max-width:700px;margin:auto;padding:18px}
+.header{
+ background:#181925;border-radius:18px;padding:18px;
+ border:1px solid rgba(255,255,255,.08);
+}
+h1{margin:0 0 8px;font-size:22px}
+.status{color:#2ecc71;font-size:13px}
+.chat{
+ margin-top:15px;background:#181925;border-radius:18px;
+ padding:15px;min-height:55vh;
+ border:1px solid rgba(255,255,255,.08);
+}
+.msg{
+ margin:9px 0;padding:11px 13px;border-radius:12px;
+ background:#252636;line-height:1.6;
+}
+.user{background:#1f6feb}
+.compose{
+ position:sticky;bottom:0;margin-top:15px;
+ display:flex;gap:8px;background:#0f1016;padding-top:10px;
+}
+input{
+ flex:1;padding:13px;border:0;border-radius:12px;
+ background:#252636;color:#fff;outline:none;
+}
+button{
+ border:0;border-radius:12px;padding:12px 18px;
+ background:#1f6feb;color:#fff;font-weight:bold;
+}
+.back{
+ display:inline-block;margin-top:12px;color:#aaa;text-decoration:none;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="header">
+  <h1>⚖️ مستشارك مالك</h1>
+  <div class="status">● متاح للاستشارة</div>
+ </div>
+
+ <div class="chat" id="chat">
+  <div class="msg">
+   مرحباً بك. أنا المستشار مالك، كيف يمكنني مساعدتك؟
+  </div>
+ </div>
+
+ <div class="compose">
+  <input id="message" placeholder="اكتب استشارتك..." autocomplete="off">
+  <button onclick="sendMessage()">إرسال</button>
+ </div>
+
+ <a class="back" href="/lex-ui.html">← العودة إلى منصة لكس</a>
+</div>
+
+<script>
+async function sendMessage(){
+ const input=document.getElementById("message");
+ const text=input.value.trim();
+ if(!text)return;
+
+ const chat=document.getElementById("chat");
+
+ const user=document.createElement("div");
+ user.className="msg user";
+ user.textContent=text;
+ chat.appendChild(user);
+
+ input.value="";
+
+ const wait=document.createElement("div");
+ wait.className="msg";
+ wait.textContent="⏳ جاري التواصل مع المستشار مالك...";
+ chat.appendChild(wait);
+
+ try{
+   const r=await fetch("/api/malik/chat",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({message:text,history:[]})
+   });
+
+   const data=await r.json();
+   wait.textContent=data.reply || data.message || "تعذر الحصول على رد حالياً.";
+ }catch(e){
+   wait.textContent="⚠️ تعذر الاتصال بخدمة المستشار حالياً.";
+ }
+
+ chat.scrollTop=chat.scrollHeight;
+}
+
+document.getElementById("message").addEventListener("keydown",e=>{
+ if(e.key==="Enter")sendMessage();
+});
+</script>
+</body>
+</html>
