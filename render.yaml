@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: lexbridge-live
+    runtime: node
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+      - key: MALIK_BRIDGE_URL
+        sync: false

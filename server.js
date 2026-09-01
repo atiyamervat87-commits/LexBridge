@@ -4,7 +4,12 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CORS_ORIGIN || true,
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(express.json());
 
@@ -377,9 +382,23 @@ function leaveRoom(socket) {
 
 
 // ===== MALIK CONSULTANT BRIDGE =====
+app.get("/api/malik/health", async (req, res) => {
+    const bridgeUrl =
+        process.env.MALIK_BRIDGE_URL ||
+        "http://127.0.0.1:3000/api/consultant/chat";
+
+    res.json({
+        success: true,
+        service: "malik-consultant-bridge",
+        configured: Boolean(process.env.MALIK_BRIDGE_URL),
+        bridgeUrl: process.env.MALIK_BRIDGE_URL ? bridgeUrl : "local-default",
+        status: process.env.MALIK_BRIDGE_URL ? "configured" : "local-fallback"
+    });
+});
+
 app.post("/api/malik/chat", async (req, res) => {
     try {
-        const response = await fetch("http://127.0.0.1:3000/api/consultant/chat", {
+        const response = await fetch(process.env.MALIK_BRIDGE_URL || "http://127.0.0.1:3000/api/consultant/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -409,9 +428,12 @@ app.post("/api/malik/chat", async (req, res) => {
 
 // ===== END MALIK CONSULTANT BRIDGE =====
 
-server.listen(5000, () => {
+const PORT = Number(process.env.PORT) || 5000;
+const HOST = process.env.HOST || "0.0.0.0";
+
+server.listen(PORT, HOST, () => {
     console.log("🚀 LIVE PLATFORM");
     console.log("✅ Real rooms enabled");
     console.log("👑 Hosts + 👥 Viewers + 🔢 Live counters");
-    console.log("🌐 http://127.0.0.1:5000");
+    console.log(`🌐 http://${HOST}:${PORT}`);
 });
