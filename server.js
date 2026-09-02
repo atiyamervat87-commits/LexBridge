@@ -1,6 +1,10 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const {
+    createUser,
+    getWallet
+} = require("./wallet-engine");
 
 const app = express();
 const server = http.createServer(app);
@@ -60,6 +64,118 @@ function roomsDirectoryState() {
 function broadcastRoomsDirectory() {
     io.emit("rooms-directory", roomsDirectoryState());
 }
+
+/* ===== ACCOUNT + WALLET FOUNDATION ===== */
+
+/*
+ * LexBridge Account + Wallet foundation.
+ *
+ * This endpoint creates/resolves an account and its wallet.
+ * It intentionally does NOT expose public credit/debit operations.
+ */
+
+app.post("/api/account", async (req, res) => {
+    try {
+        const username = String(req.body?.username || "").trim();
+        const displayName =
+            req.body?.displayName == null
+                ? null
+                : String(req.body.displayName).trim();
+
+        if (!username) {
+            return res.status(400).json({
+                success: false,
+                error: "USERNAME_REQUIRED"
+            });
+        }
+
+        if (username.length < 2 || username.length > 50) {
+            return res.status(400).json({
+                success: false,
+                error: "USERNAME_LENGTH_INVALID"
+            });
+        }
+
+        const account = await createUser(username, displayName);
+        const wallet = await getWallet(account.userId);
+
+        if (!wallet) {
+            return res.status(500).json({
+                success: false,
+                error: "WALLET_NOT_FOUND"
+            });
+        }
+
+        return res.status(account.created ? 201 : 200).json({
+            success: true,
+            account: {
+                userId: account.userId,
+                username,
+                displayName,
+                created: account.created
+            },
+            wallet: {
+                walletId: wallet.walletId,
+                currency: wallet.currency,
+                availableMinor: wallet.availableMinor,
+                reservedMinor: wallet.reservedMinor,
+                status: wallet.status,
+                version: wallet.version
+            }
+        });
+    } catch (error) {
+        console.error("ACCOUNT_OPERATION_ERROR:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            error: "ACCOUNT_OPERATION_FAILED"
+        });
+    }
+});
+
+app.get("/api/account/:userId/wallet", async (req, res) => {
+    try {
+        const userId = String(req.params.userId || "").trim();
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                error: "USER_ID_REQUIRED"
+            });
+        }
+
+        const wallet = await getWallet(userId);
+
+        if (!wallet) {
+            return res.status(404).json({
+                success: false,
+                error: "WALLET_NOT_FOUND"
+            });
+        }
+
+        return res.json({
+            success: true,
+            wallet: {
+                walletId: wallet.walletId,
+                userId: wallet.userId,
+                currency: wallet.currency,
+                availableMinor: wallet.availableMinor,
+                reservedMinor: wallet.reservedMinor,
+                status: wallet.status,
+                version: wallet.version
+            }
+        });
+    } catch (error) {
+        console.error("WALLET_READ_ERROR:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            error: "WALLET_READ_FAILED"
+        });
+    }
+});
+
+/* ===== END ACCOUNT + WALLET FOUNDATION ===== */
 
 /* ===== PLATFORM HEALTH ===== */
 app.get("/api/health", (req, res) => {
