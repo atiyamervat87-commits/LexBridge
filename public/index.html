@@ -663,6 +663,54 @@ header button:hover{
   }
 }
 
+
+/* ===== LEXBRIDGE ROOM UX V4 ===== */
+#roomsDirectory{
+  position:relative;
+  overflow:hidden;
+}
+#roomsDirectory h3{
+  margin-bottom:6px;
+}
+#roomsDirectory .small{
+  line-height:1.8;
+}
+#roomsGrid .room-choice{
+  min-height:118px !important;
+  padding:14px 10px !important;
+  border-radius:20px !important;
+  font-size:13px;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+#roomsGrid .room-choice:hover{
+  transform:translateY(-3px) !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+}
+#roomsGrid .room-choice strong{
+  display:inline-block;
+  margin:6px 0 3px;
+}
+#joinBtn{
+  min-height:50px;
+  margin-top:12px;
+  font-weight:800;
+}
+
+
+/* ===== LEXBRIDGE ROOM SELECTION STATUS V4 ===== */
+.room-selection-status{
+  margin:12px 0 4px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.09);
+  font-size:13px;
+  font-weight:700;
+}
+.room-selection-status b{
+  font-weight:900;
+}
+
 </style>
 </head>
 
@@ -679,9 +727,12 @@ header button:hover{
 
   <div class="room-card" id="roomsDirectory">
     <h3>📡 الغرف المباشرة</h3>
-    <p class="small">اختر غرفة وابدأ المشاهدة أو ادخل كمضيف.</p>
+    <p class="small">اختر الغرفة أولًا، ثم اكتب اسمك وحدد دورك للدخول.</p>
 
-    <div id="roomsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px">
+    <div class="room-selection-status">
+  📍 الغرفة المختارة: <b id="roomSelectionLabel">الرئيسية</b>
+</div>
+<div id="roomsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px">
 
       <button type="button" class="control-btn room-choice" data-room-id="lex-main" data-room-name="الرئيسية" style="width:100%">
         🏠<br><strong>الرئيسية</strong><br><small>غرفة عامة</small>
@@ -729,7 +780,7 @@ header button:hover{
       <option value="viewer">👁️ مشاهد</option>
     </select>
 
-    <button class="btn-live" id="joinBtn">دخول الغرفة الآن</button>
+    <button class="btn-live" id="joinBtn">🚪 دخول الغرفة الآن</button>
 
     <div class="status-row">
       <span class="badge" id="roomBadge">الغرفة: الرئيسية</span>
@@ -873,6 +924,8 @@ function resetRoomUI(){
   viewerPlaceholder.classList.remove("hidden");
 
   $("roomBadge").textContent = "الغرفة: " + ROOM_NAME;
+  const roomSelectionLabel = $("roomSelectionLabel");
+  if (roomSelectionLabel) roomSelectionLabel.textContent = ROOM_NAME;
 }
 
 function selectRoom(roomId, roomName){
